@@ -8,7 +8,7 @@ cd "%~dp0%..\cmake"
 
 :: Determine target directory and cmake generator
 set arg1=%1
-if "%arg1%"=="" set arg1=vs2012
+if "%arg1%"=="" set arg1=vs2013
 set generator=
 if "%arg1%"=="vs2008" set generator=Visual Studio 9 2008
 if "%arg1%"=="vs2010" set generator=Visual Studio 10
@@ -49,8 +49,10 @@ cmake ^
 -DMOAI_SFMT=TRUE ^
 -DMOAI_VORBIS=TRUE ^
 -DMOAI_UNTZ=TRUE ^
--DMOAI_LUAJIT=TRUE ^
+-DMOAI_LUAJIT=FALSE ^
 -DMOAI_HTTP_CLIENT=TRUE ^
+-DPLUGIN_MOAI-GWEN=TRUE ^
+-DPLUGIN_DIR="C:/moai-dev/plugins" ^
 ..\..\
 
 :end

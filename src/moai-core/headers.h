@@ -24,4 +24,7 @@
 #include <moai-core/MOAILuaState-impl.h>
 #include <moai-core/MOAILuaClass-impl.h>
 
+#include <moai-core/MOAIClass.h>
+#include <moai-core/MOAIClassSingleton.h>
+
 #endif
