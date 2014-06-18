@@ -21,7 +21,7 @@ public:
 // MOAIGlyph
 //================================================================//
 class MOAIGlyph {
-private:
+public:
 	
 	static const u32 MAX_KERN_TABLE_SIZE	= 512;
 	static const u32 NULL_CODE_ID			= 0xffffffff;
