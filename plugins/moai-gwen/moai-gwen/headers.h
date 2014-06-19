@@ -6,9 +6,10 @@
 
 #include <moai-gwen/pch.h>
 
-#include <moai-gwen/MOAIGwen.h>
-#include <moai-gwen/MOAIGwenRenderer.h>
+#include <moai-gwen/MOAIGwenCanvas.h>
+#include <moai-gwen/MOAIGwenRender.h>
 #include <moai-gwen/MOAIGwenSkin.h>
 #include <moai-gwen/MOAIGwenSkinTexture.h>
+#include <moai-gwen/MOAIGwenInput.h>
 
 #endif

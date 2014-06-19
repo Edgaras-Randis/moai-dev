@@ -2,6 +2,7 @@
 // http://getmoai.com
 
 #include "pch.h"
+#include <moai-gwen/MOAIGwenRender.h>
 #include <moai-gwen/MOAIGwenSkinTexture.h>
 #include <moai-gwen/MOAIGwenSkin.h>
 
@@ -9,207 +10,241 @@
 // lua
 //================================================================//
 
-//----------------------------------------------------------------//
-MOAIGwenSkin::MOAIGwenSkin() : skinTexture(NULL)
+int MOAIGwenSkin::_setRender(lua_State* L)
 {
+	MOAI_LUA_SETUP(MOAIGwenSkin, "U");
 
+	self->Render.Set(*self, state.GetLuaObject<MOAIGwenRender>(2, true));
+
+	self->SetRender(self->Render);
+
+	return 0;
+}
+
+int MOAIGwenSkin::_init(lua_State* L)
+{
+	MOAI_LUA_SETUP(MOAIGwenSkin, "U");
+
+	state.Push(self->Init(state.GetLuaObject<MOAIGwenSkinTexture>(2, true)));
+
+	return 1;
+}
+
+//----------------------------------------------------------------//
+MOAIGwenSkin::MOAIGwenSkin()
+{
+	RTTI_BEGIN
+		RTTI_EXTEND(MOAILuaObject)
+	RTTI_END
 }
 
 MOAIGwenSkin::~MOAIGwenSkin()
 {
-
+	SkinTexture.Set(*this, 0);
+	Render.Set(*this, 0);
 }
 
 void MOAIGwenSkin::RegisterLuaClass(MOAILuaState& state)
 {
+	MOAILuaObject::RegisterLuaClass(state);
 
+	luaL_Reg regTable[] =
+	{
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
 }
+
 void MOAIGwenSkin::RegisterLuaFuncs(MOAILuaState& state)
 {
+	MOAILuaObject::RegisterLuaFuncs(state);
 
+	luaL_Reg regTable[] =
+	{
+		{ "init",	   _init },
+		{ "setRender", _setRender },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
 }
 
-void MOAIGwenSkin::Init(MOAIGwenSkinTexture* texture)
+bool MOAIGwenSkin::Init(MOAIGwenSkinTexture* texture)
 {
-	if (!texture)
+	SkinTexture.Set(*this, texture);
+
+	if (!SkinTexture)
 	{
-		return;
+		return false;
 	}
-
-	if (skinTexture)
-	{
-		this->LuaRelease(skinTexture);
-		skinTexture = NULL;
-	}
-
-	this->LuaRetain(texture);
-
-	skinTexture = texture;
 
 	m_DefaultFont.facename = L"Microsoft Sans Serif";
 	m_DefaultFont.size = 11;
 
-	Colors.Window.TitleActive = skinTexture->GetPixelColor(4 + 8 * 0, 508, Gwen::Color(255, 0, 0));
-	Colors.Window.TitleInactive = skinTexture->GetPixelColor(4 + 8 * 1, 508, Gwen::Color(255, 255, 0));
-	Colors.Button.Normal = skinTexture->GetPixelColor(4 + 8 * 2, 508, Gwen::Color(255, 255, 0));
-	Colors.Button.Hover = skinTexture->GetPixelColor(4 + 8 * 3, 508, Gwen::Color(255, 255, 0));
-	Colors.Button.Down = skinTexture->GetPixelColor(4 + 8 * 2, 500, Gwen::Color(255, 255, 0));
-	Colors.Button.Disabled = skinTexture->GetPixelColor(4 + 8 * 3, 500, Gwen::Color(255, 255, 0));
-	Colors.Tab.Active.Normal = skinTexture->GetPixelColor(4 + 8 * 4, 508, Gwen::Color(255, 255, 0));
-	Colors.Tab.Active.Hover = skinTexture->GetPixelColor(4 + 8 * 5, 508, Gwen::Color(255, 255, 0));
-	Colors.Tab.Active.Down = skinTexture->GetPixelColor(4 + 8 * 4, 500, Gwen::Color(255, 255, 0));
-	Colors.Tab.Active.Disabled = skinTexture->GetPixelColor(4 + 8 * 5, 500, Gwen::Color(255, 255, 0));
-	Colors.Tab.Inactive.Normal = skinTexture->GetPixelColor(4 + 8 * 6, 508, Gwen::Color(255, 255, 0));
-	Colors.Tab.Inactive.Hover = skinTexture->GetPixelColor(4 + 8 * 7, 508, Gwen::Color(255, 255, 0));
-	Colors.Tab.Inactive.Down = skinTexture->GetPixelColor(4 + 8 * 6, 500, Gwen::Color(255, 255, 0));
-	Colors.Tab.Inactive.Disabled = skinTexture->GetPixelColor(4 + 8 * 7, 500, Gwen::Color(255, 255, 0));
-	Colors.Label.Default = skinTexture->GetPixelColor(4 + 8 * 8, 508, Gwen::Color(255, 255, 0));
-	Colors.Label.Bright = skinTexture->GetPixelColor(4 + 8 * 9, 508, Gwen::Color(255, 255, 0));
-	Colors.Label.Dark = skinTexture->GetPixelColor(4 + 8 * 8, 500, Gwen::Color(255, 255, 0));
-	Colors.Label.Highlight = skinTexture->GetPixelColor(4 + 8 * 9, 500, Gwen::Color(255, 255, 0));
-	Colors.Tree.Lines = skinTexture->GetPixelColor(4 + 8 * 10, 508, Gwen::Color(255, 255, 0));
-	Colors.Tree.Normal = skinTexture->GetPixelColor(4 + 8 * 11, 508, Gwen::Color(255, 255, 0));
-	Colors.Tree.Hover = skinTexture->GetPixelColor(4 + 8 * 10, 500, Gwen::Color(255, 255, 0));
-	Colors.Tree.Selected = skinTexture->GetPixelColor(4 + 8 * 11, 500, Gwen::Color(255, 255, 0));
-	Colors.Properties.Line_Normal = skinTexture->GetPixelColor(4 + 8 * 12, 508, Gwen::Color(255, 255, 0));
-	Colors.Properties.Line_Selected = skinTexture->GetPixelColor(4 + 8 * 13, 508, Gwen::Color(255, 255, 0));
-	Colors.Properties.Line_Hover = skinTexture->GetPixelColor(4 + 8 * 12, 500, Gwen::Color(255, 255, 0));
-	Colors.Properties.Title = skinTexture->GetPixelColor(4 + 8 * 13, 500, Gwen::Color(255, 255, 0));
-	Colors.Properties.Column_Normal = skinTexture->GetPixelColor(4 + 8 * 14, 508, Gwen::Color(255, 255, 0));
-	Colors.Properties.Column_Selected = skinTexture->GetPixelColor(4 + 8 * 15, 508, Gwen::Color(255, 255, 0));
-	Colors.Properties.Column_Hover = skinTexture->GetPixelColor(4 + 8 * 14, 500, Gwen::Color(255, 255, 0));
-	Colors.Properties.Border = skinTexture->GetPixelColor(4 + 8 * 15, 500, Gwen::Color(255, 255, 0));
-	Colors.Properties.Label_Normal = skinTexture->GetPixelColor(4 + 8 * 16, 508, Gwen::Color(255, 255, 0));
-	Colors.Properties.Label_Selected = skinTexture->GetPixelColor(4 + 8 * 17, 508, Gwen::Color(255, 255, 0));
-	Colors.Properties.Label_Hover = skinTexture->GetPixelColor(4 + 8 * 16, 500, Gwen::Color(255, 255, 0));
-	Colors.ModalBackground = skinTexture->GetPixelColor(4 + 8 * 18, 508, Gwen::Color(255, 255, 0));
-	Colors.TooltipText = skinTexture->GetPixelColor(4 + 8 * 19, 508, Gwen::Color(255, 255, 0));
-	Colors.Category.Header = skinTexture->GetPixelColor(4 + 8 * 18, 500, Gwen::Color(255, 255, 0));
-	Colors.Category.Header_Closed = skinTexture->GetPixelColor(4 + 8 * 19, 500, Gwen::Color(255, 255, 0));
-	Colors.Category.Line.Text = skinTexture->GetPixelColor(4 + 8 * 20, 508, Gwen::Color(255, 255, 0));
-	Colors.Category.Line.Text_Hover = skinTexture->GetPixelColor(4 + 8 * 21, 508, Gwen::Color(255, 255, 0));
-	Colors.Category.Line.Text_Selected = skinTexture->GetPixelColor(4 + 8 * 20, 500, Gwen::Color(255, 255, 0));
-	Colors.Category.Line.Button = skinTexture->GetPixelColor(4 + 8 * 21, 500, Gwen::Color(255, 255, 0));
-	Colors.Category.Line.Button_Hover = skinTexture->GetPixelColor(4 + 8 * 22, 508, Gwen::Color(255, 255, 0));
-	Colors.Category.Line.Button_Selected = skinTexture->GetPixelColor(4 + 8 * 23, 508, Gwen::Color(255, 255, 0));
-	Colors.Category.LineAlt.Text = skinTexture->GetPixelColor(4 + 8 * 22, 500, Gwen::Color(255, 255, 0));
-	Colors.Category.LineAlt.Text_Hover = skinTexture->GetPixelColor(4 + 8 * 23, 500, Gwen::Color(255, 255, 0));
-	Colors.Category.LineAlt.Text_Selected = skinTexture->GetPixelColor(4 + 8 * 24, 508, Gwen::Color(255, 255, 0));
-	Colors.Category.LineAlt.Button = skinTexture->GetPixelColor(4 + 8 * 25, 508, Gwen::Color(255, 255, 0));
-	Colors.Category.LineAlt.Button_Hover = skinTexture->GetPixelColor(4 + 8 * 24, 500, Gwen::Color(255, 255, 0));
-	Colors.Category.LineAlt.Button_Selected = skinTexture->GetPixelColor(4 + 8 * 25, 500, Gwen::Color(255, 255, 0));
+	Colors.Window.TitleActive = SkinTexture->GetPixelColor(4 + 8 * 0, 508, Gwen::Color(255, 0, 0));
+	Colors.Window.TitleInactive = SkinTexture->GetPixelColor(4 + 8 * 1, 508, Gwen::Color(255, 255, 0));
+	Colors.Button.Normal = SkinTexture->GetPixelColor(4 + 8 * 2, 508, Gwen::Color(255, 255, 0));
+	Colors.Button.Hover = SkinTexture->GetPixelColor(4 + 8 * 3, 508, Gwen::Color(255, 255, 0));
+	Colors.Button.Down = SkinTexture->GetPixelColor(4 + 8 * 2, 500, Gwen::Color(255, 255, 0));
+	Colors.Button.Disabled = SkinTexture->GetPixelColor(4 + 8 * 3, 500, Gwen::Color(255, 255, 0));
+	Colors.Tab.Active.Normal = SkinTexture->GetPixelColor(4 + 8 * 4, 508, Gwen::Color(255, 255, 0));
+	Colors.Tab.Active.Hover = SkinTexture->GetPixelColor(4 + 8 * 5, 508, Gwen::Color(255, 255, 0));
+	Colors.Tab.Active.Down = SkinTexture->GetPixelColor(4 + 8 * 4, 500, Gwen::Color(255, 255, 0));
+	Colors.Tab.Active.Disabled = SkinTexture->GetPixelColor(4 + 8 * 5, 500, Gwen::Color(255, 255, 0));
+	Colors.Tab.Inactive.Normal = SkinTexture->GetPixelColor(4 + 8 * 6, 508, Gwen::Color(255, 255, 0));
+	Colors.Tab.Inactive.Hover = SkinTexture->GetPixelColor(4 + 8 * 7, 508, Gwen::Color(255, 255, 0));
+	Colors.Tab.Inactive.Down = SkinTexture->GetPixelColor(4 + 8 * 6, 500, Gwen::Color(255, 255, 0));
+	Colors.Tab.Inactive.Disabled = SkinTexture->GetPixelColor(4 + 8 * 7, 500, Gwen::Color(255, 255, 0));
+	Colors.Label.Default = SkinTexture->GetPixelColor(4 + 8 * 8, 508, Gwen::Color(255, 255, 0));
+	Colors.Label.Bright = SkinTexture->GetPixelColor(4 + 8 * 9, 508, Gwen::Color(255, 255, 0));
+	Colors.Label.Dark = SkinTexture->GetPixelColor(4 + 8 * 8, 500, Gwen::Color(255, 255, 0));
+	Colors.Label.Highlight = SkinTexture->GetPixelColor(4 + 8 * 9, 500, Gwen::Color(255, 255, 0));
+	Colors.Tree.Lines = SkinTexture->GetPixelColor(4 + 8 * 10, 508, Gwen::Color(255, 255, 0));
+	Colors.Tree.Normal = SkinTexture->GetPixelColor(4 + 8 * 11, 508, Gwen::Color(255, 255, 0));
+	Colors.Tree.Hover = SkinTexture->GetPixelColor(4 + 8 * 10, 500, Gwen::Color(255, 255, 0));
+	Colors.Tree.Selected = SkinTexture->GetPixelColor(4 + 8 * 11, 500, Gwen::Color(255, 255, 0));
+	Colors.Properties.Line_Normal = SkinTexture->GetPixelColor(4 + 8 * 12, 508, Gwen::Color(255, 255, 0));
+	Colors.Properties.Line_Selected = SkinTexture->GetPixelColor(4 + 8 * 13, 508, Gwen::Color(255, 255, 0));
+	Colors.Properties.Line_Hover = SkinTexture->GetPixelColor(4 + 8 * 12, 500, Gwen::Color(255, 255, 0));
+	Colors.Properties.Title = SkinTexture->GetPixelColor(4 + 8 * 13, 500, Gwen::Color(255, 255, 0));
+	Colors.Properties.Column_Normal = SkinTexture->GetPixelColor(4 + 8 * 14, 508, Gwen::Color(255, 255, 0));
+	Colors.Properties.Column_Selected = SkinTexture->GetPixelColor(4 + 8 * 15, 508, Gwen::Color(255, 255, 0));
+	Colors.Properties.Column_Hover = SkinTexture->GetPixelColor(4 + 8 * 14, 500, Gwen::Color(255, 255, 0));
+	Colors.Properties.Border = SkinTexture->GetPixelColor(4 + 8 * 15, 500, Gwen::Color(255, 255, 0));
+	Colors.Properties.Label_Normal = SkinTexture->GetPixelColor(4 + 8 * 16, 508, Gwen::Color(255, 255, 0));
+	Colors.Properties.Label_Selected = SkinTexture->GetPixelColor(4 + 8 * 17, 508, Gwen::Color(255, 255, 0));
+	Colors.Properties.Label_Hover = SkinTexture->GetPixelColor(4 + 8 * 16, 500, Gwen::Color(255, 255, 0));
+	Colors.ModalBackground = SkinTexture->GetPixelColor(4 + 8 * 18, 508, Gwen::Color(255, 255, 0));
+	Colors.TooltipText = SkinTexture->GetPixelColor(4 + 8 * 19, 508, Gwen::Color(255, 255, 0));
+	Colors.Category.Header = SkinTexture->GetPixelColor(4 + 8 * 18, 500, Gwen::Color(255, 255, 0));
+	Colors.Category.Header_Closed = SkinTexture->GetPixelColor(4 + 8 * 19, 500, Gwen::Color(255, 255, 0));
+	Colors.Category.Line.Text = SkinTexture->GetPixelColor(4 + 8 * 20, 508, Gwen::Color(255, 255, 0));
+	Colors.Category.Line.Text_Hover = SkinTexture->GetPixelColor(4 + 8 * 21, 508, Gwen::Color(255, 255, 0));
+	Colors.Category.Line.Text_Selected = SkinTexture->GetPixelColor(4 + 8 * 20, 500, Gwen::Color(255, 255, 0));
+	Colors.Category.Line.Button = SkinTexture->GetPixelColor(4 + 8 * 21, 500, Gwen::Color(255, 255, 0));
+	Colors.Category.Line.Button_Hover = SkinTexture->GetPixelColor(4 + 8 * 22, 508, Gwen::Color(255, 255, 0));
+	Colors.Category.Line.Button_Selected = SkinTexture->GetPixelColor(4 + 8 * 23, 508, Gwen::Color(255, 255, 0));
+	Colors.Category.LineAlt.Text = SkinTexture->GetPixelColor(4 + 8 * 22, 500, Gwen::Color(255, 255, 0));
+	Colors.Category.LineAlt.Text_Hover = SkinTexture->GetPixelColor(4 + 8 * 23, 500, Gwen::Color(255, 255, 0));
+	Colors.Category.LineAlt.Text_Selected = SkinTexture->GetPixelColor(4 + 8 * 24, 508, Gwen::Color(255, 255, 0));
+	Colors.Category.LineAlt.Button = SkinTexture->GetPixelColor(4 + 8 * 25, 508, Gwen::Color(255, 255, 0));
+	Colors.Category.LineAlt.Button_Hover = SkinTexture->GetPixelColor(4 + 8 * 24, 500, Gwen::Color(255, 255, 0));
+	Colors.Category.LineAlt.Button_Selected = SkinTexture->GetPixelColor(4 + 8 * 25, 500, Gwen::Color(255, 255, 0));
 
-	Textures.Shadow.Init(skinTexture, 448, 0, 31, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Tooltip.Init(skinTexture, 128, 320, 127, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.StatusBar.Init(skinTexture, 128, 288, 127, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Selection.Init(skinTexture, 384, 32, 31, 31, Gwen::Margin(4, 4, 4, 4));
-	Textures.Panel.Normal.Init(skinTexture, 256, 0, 63, 63, Gwen::Margin(16, 16, 16, 16));
-	Textures.Panel.Bright.Init(skinTexture, 256 + 64, 0, 63, 63, Gwen::Margin(16, 16, 16, 16));
-	Textures.Panel.Dark.Init(skinTexture, 256, 64, 63, 63, Gwen::Margin(16, 16, 16, 16));
-	Textures.Panel.Highlight.Init(skinTexture, 256 + 64, 64, 63, 63, Gwen::Margin(16, 16, 16, 16));
-	Textures.Window.Normal.Init(skinTexture, 0, 0, 127, 127, Gwen::Margin(8, 32, 8, 8));
-	Textures.Window.Inactive.Init(skinTexture, 128, 0, 127, 127, Gwen::Margin(8, 32, 8, 8));
-	Textures.Checkbox.Active.Checked.Init(skinTexture, 448, 32, 15, 15);
-	Textures.Checkbox.Active.Normal.Init(skinTexture, 464, 32, 15, 15);
-	Textures.Checkbox.Disabled.Checked.Init(skinTexture, 448, 48, 15, 15);
-	Textures.Checkbox.Disabled.Normal.Init(skinTexture, 464, 48, 15, 15);
-	Textures.RadioButton.Active.Checked.Init(skinTexture, 448, 64, 15, 15);
-	Textures.RadioButton.Active.Normal.Init(skinTexture, 464, 64, 15, 15);
-	Textures.RadioButton.Disabled.Checked.Init(skinTexture, 448, 80, 15, 15);
-	Textures.RadioButton.Disabled.Normal.Init(skinTexture, 464, 80, 15, 15);
-	Textures.TextBox.Normal.Init(skinTexture, 0, 150, 127, 21, Gwen::Margin(4, 4, 4, 4));
-	Textures.TextBox.Focus.Init(skinTexture, 0, 172, 127, 21, Gwen::Margin(4, 4, 4, 4));
-	Textures.TextBox.Disabled.Init(skinTexture, 0, 193, 127, 21, Gwen::Margin(4, 4, 4, 4));
-	Textures.Menu.Strip.Init(skinTexture, 0, 128, 127, 21, Gwen::Margin(1, 1, 1, 1));
-	Textures.Menu.BackgroundWithMargin.Init(skinTexture, 128, 128, 127, 63, Gwen::Margin(24, 8, 8, 8));
-	Textures.Menu.Background.Init(skinTexture, 128, 192, 127, 63, Gwen::Margin(8, 8, 8, 8));
-	Textures.Menu.Hover.Init(skinTexture, 128, 256, 127, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Menu.RightArrow.Init(skinTexture, 464, 112, 15, 15);
-	Textures.Menu.Check.Init(skinTexture, 448, 112, 15, 15);
-	Textures.Tab.Control.Init(skinTexture, 0, 256, 127, 127, Gwen::Margin(8, 8, 8, 8));
-	Textures.Tab.Bottom.Active.Init(skinTexture, 0, 416, 63, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Tab.Bottom.Inactive.Init(skinTexture, 0 + 128, 416, 63, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Tab.Top.Active.Init(skinTexture, 0, 384, 63, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Tab.Top.Inactive.Init(skinTexture, 0 + 128, 384, 63, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Tab.Left.Active.Init(skinTexture, 64, 384, 31, 63, Gwen::Margin(8, 8, 8, 8));
-	Textures.Tab.Left.Inactive.Init(skinTexture, 64 + 128, 384, 31, 63, Gwen::Margin(8, 8, 8, 8));
-	Textures.Tab.Right.Active.Init(skinTexture, 96, 384, 31, 63, Gwen::Margin(8, 8, 8, 8));
-	Textures.Tab.Right.Inactive.Init(skinTexture, 96 + 128, 384, 31, 63, Gwen::Margin(8, 8, 8, 8));
-	Textures.Tab.HeaderBar.Init(skinTexture, 128, 352, 127, 31, Gwen::Margin(4, 4, 4, 4));
-	Textures.Window.Close.Init(skinTexture, 32, 448, 31, 31);
-	Textures.Window.Close_Hover.Init(skinTexture, 64, 448, 31, 31);
-	Textures.Window.Close_Down.Init(skinTexture, 96, 448, 31, 31);
-	Textures.Window.Maxi.Init(skinTexture, 32 + 96 * 2, 448, 31, 31);
-	Textures.Window.Maxi_Hover.Init(skinTexture, 64 + 96 * 2, 448, 31, 31);
-	Textures.Window.Maxi_Down.Init(skinTexture, 96 + 96 * 2, 448, 31, 31);
-	Textures.Window.Restore.Init(skinTexture, 32 + 96 * 2, 448 + 32, 31, 31);
-	Textures.Window.Restore_Hover.Init(skinTexture, 64 + 96 * 2, 448 + 32, 31, 31);
-	Textures.Window.Restore_Down.Init(skinTexture, 96 + 96 * 2, 448 + 32, 31, 31);
-	Textures.Window.Mini.Init(skinTexture, 32 + 96, 448, 31, 31);
-	Textures.Window.Mini_Hover.Init(skinTexture, 64 + 96, 448, 31, 31);
-	Textures.Window.Mini_Down.Init(skinTexture, 96 + 96, 448, 31, 31);
-	Textures.Tree.Background.Init(skinTexture, 256, 128, 127, 127, Gwen::Margin(16, 16, 16, 16));
-	Textures.Tree.Plus.Init(skinTexture, 448, 96, 15, 15);
-	Textures.Tree.Minus.Init(skinTexture, 464, 96, 15, 15);
-	Textures.Input.Button.Normal.Init(skinTexture, 480, 0, 31, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Input.Button.Hovered.Init(skinTexture, 480, 32, 31, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Input.Button.Disabled.Init(skinTexture, 480, 64, 31, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Input.Button.Pressed.Init(skinTexture, 480, 96, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Shadow.Init(SkinTexture, 448, 0, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Tooltip.Init(SkinTexture, 128, 320, 127, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.StatusBar.Init(SkinTexture, 128, 288, 127, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Selection.Init(SkinTexture, 384, 32, 31, 31, Gwen::Margin(4, 4, 4, 4));
+	Textures.Panel.Normal.Init(SkinTexture, 256, 0, 63, 63, Gwen::Margin(16, 16, 16, 16));
+	Textures.Panel.Bright.Init(SkinTexture, 256 + 64, 0, 63, 63, Gwen::Margin(16, 16, 16, 16));
+	Textures.Panel.Dark.Init(SkinTexture, 256, 64, 63, 63, Gwen::Margin(16, 16, 16, 16));
+	Textures.Panel.Highlight.Init(SkinTexture, 256 + 64, 64, 63, 63, Gwen::Margin(16, 16, 16, 16));
+	Textures.Window.Normal.Init(SkinTexture, 0, 0, 127, 127, Gwen::Margin(8, 32, 8, 8));
+	Textures.Window.Inactive.Init(SkinTexture, 128, 0, 127, 127, Gwen::Margin(8, 32, 8, 8));
+	Textures.Checkbox.Active.Checked.Init(SkinTexture, 448, 32, 15, 15);
+	Textures.Checkbox.Active.Normal.Init(SkinTexture, 464, 32, 15, 15);
+	Textures.Checkbox.Disabled.Checked.Init(SkinTexture, 448, 48, 15, 15);
+	Textures.Checkbox.Disabled.Normal.Init(SkinTexture, 464, 48, 15, 15);
+	Textures.RadioButton.Active.Checked.Init(SkinTexture, 448, 64, 15, 15);
+	Textures.RadioButton.Active.Normal.Init(SkinTexture, 464, 64, 15, 15);
+	Textures.RadioButton.Disabled.Checked.Init(SkinTexture, 448, 80, 15, 15);
+	Textures.RadioButton.Disabled.Normal.Init(SkinTexture, 464, 80, 15, 15);
+	Textures.TextBox.Normal.Init(SkinTexture, 0, 150, 127, 21, Gwen::Margin(4, 4, 4, 4));
+	Textures.TextBox.Focus.Init(SkinTexture, 0, 172, 127, 21, Gwen::Margin(4, 4, 4, 4));
+	Textures.TextBox.Disabled.Init(SkinTexture, 0, 193, 127, 21, Gwen::Margin(4, 4, 4, 4));
+	Textures.Menu.Strip.Init(SkinTexture, 0, 128, 127, 21, Gwen::Margin(1, 1, 1, 1));
+	Textures.Menu.BackgroundWithMargin.Init(SkinTexture, 128, 128, 127, 63, Gwen::Margin(24, 8, 8, 8));
+	Textures.Menu.Background.Init(SkinTexture, 128, 192, 127, 63, Gwen::Margin(8, 8, 8, 8));
+	Textures.Menu.Hover.Init(SkinTexture, 128, 256, 127, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Menu.RightArrow.Init(SkinTexture, 464, 112, 15, 15);
+	Textures.Menu.Check.Init(SkinTexture, 448, 112, 15, 15);
+	Textures.Tab.Control.Init(SkinTexture, 0, 256, 127, 127, Gwen::Margin(8, 8, 8, 8));
+	Textures.Tab.Bottom.Active.Init(SkinTexture, 0, 416, 63, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Tab.Bottom.Inactive.Init(SkinTexture, 0 + 128, 416, 63, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Tab.Top.Active.Init(SkinTexture, 0, 384, 63, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Tab.Top.Inactive.Init(SkinTexture, 0 + 128, 384, 63, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Tab.Left.Active.Init(SkinTexture, 64, 384, 31, 63, Gwen::Margin(8, 8, 8, 8));
+	Textures.Tab.Left.Inactive.Init(SkinTexture, 64 + 128, 384, 31, 63, Gwen::Margin(8, 8, 8, 8));
+	Textures.Tab.Right.Active.Init(SkinTexture, 96, 384, 31, 63, Gwen::Margin(8, 8, 8, 8));
+	Textures.Tab.Right.Inactive.Init(SkinTexture, 96 + 128, 384, 31, 63, Gwen::Margin(8, 8, 8, 8));
+	Textures.Tab.HeaderBar.Init(SkinTexture, 128, 352, 127, 31, Gwen::Margin(4, 4, 4, 4));
+	Textures.Window.Close.Init(SkinTexture, 32, 448, 31, 31);
+	Textures.Window.Close_Hover.Init(SkinTexture, 64, 448, 31, 31);
+	Textures.Window.Close_Down.Init(SkinTexture, 96, 448, 31, 31);
+	Textures.Window.Maxi.Init(SkinTexture, 32 + 96 * 2, 448, 31, 31);
+	Textures.Window.Maxi_Hover.Init(SkinTexture, 64 + 96 * 2, 448, 31, 31);
+	Textures.Window.Maxi_Down.Init(SkinTexture, 96 + 96 * 2, 448, 31, 31);
+	Textures.Window.Restore.Init(SkinTexture, 32 + 96 * 2, 448 + 32, 31, 31);
+	Textures.Window.Restore_Hover.Init(SkinTexture, 64 + 96 * 2, 448 + 32, 31, 31);
+	Textures.Window.Restore_Down.Init(SkinTexture, 96 + 96 * 2, 448 + 32, 31, 31);
+	Textures.Window.Mini.Init(SkinTexture, 32 + 96, 448, 31, 31);
+	Textures.Window.Mini_Hover.Init(SkinTexture, 64 + 96, 448, 31, 31);
+	Textures.Window.Mini_Down.Init(SkinTexture, 96 + 96, 448, 31, 31);
+	Textures.Tree.Background.Init(SkinTexture, 256, 128, 127, 127, Gwen::Margin(16, 16, 16, 16));
+	Textures.Tree.Plus.Init(SkinTexture, 448, 96, 15, 15);
+	Textures.Tree.Minus.Init(SkinTexture, 464, 96, 15, 15);
+	Textures.Input.Button.Normal.Init(SkinTexture, 480, 0, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Input.Button.Hovered.Init(SkinTexture, 480, 32, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Input.Button.Disabled.Init(SkinTexture, 480, 64, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Input.Button.Pressed.Init(SkinTexture, 480, 96, 31, 31, Gwen::Margin(8, 8, 8, 8));
 
 	for (int i = 0; i < 4; i++)
 	{
-		Textures.Scroller.Button.Normal[i].Init(skinTexture, 464 + 0, 208 + i * 16, 15, 15, Gwen::Margin(2, 2, 2, 2));
-		Textures.Scroller.Button.Hover[i].Init(skinTexture, 480, 208 + i * 16, 15, 15, Gwen::Margin(2, 2, 2, 2));
-		Textures.Scroller.Button.Down[i].Init(skinTexture, 464, 272 + i * 16, 15, 15, Gwen::Margin(2, 2, 2, 2));
-		Textures.Scroller.Button.Disabled[i].Init(skinTexture, 480 + 48, 272 + i * 16, 15, 15, Gwen::Margin(2, 2, 2, 2));
+		Textures.Scroller.Button.Normal[i].Init(SkinTexture, 464 + 0, 208 + i * 16, 15, 15, Gwen::Margin(2, 2, 2, 2));
+		Textures.Scroller.Button.Hover[i].Init(SkinTexture, 480, 208 + i * 16, 15, 15, Gwen::Margin(2, 2, 2, 2));
+		Textures.Scroller.Button.Down[i].Init(SkinTexture, 464, 272 + i * 16, 15, 15, Gwen::Margin(2, 2, 2, 2));
+		Textures.Scroller.Button.Disabled[i].Init(SkinTexture, 480 + 48, 272 + i * 16, 15, 15, Gwen::Margin(2, 2, 2, 2));
 	}
 
-	Textures.Scroller.TrackV.Init(skinTexture, 384, 208, 15, 127, Gwen::Margin(4, 4, 4, 4));
-	Textures.Scroller.ButtonV_Normal.Init(skinTexture, 384 + 16, 208, 15, 127, Gwen::Margin(4, 4, 4, 4));
-	Textures.Scroller.ButtonV_Hover.Init(skinTexture, 384 + 32, 208, 15, 127, Gwen::Margin(4, 4, 4, 4));
-	Textures.Scroller.ButtonV_Down.Init(skinTexture, 384 + 48, 208, 15, 127, Gwen::Margin(4, 4, 4, 4));
-	Textures.Scroller.ButtonV_Disabled.Init(skinTexture, 384 + 64, 208, 15, 127, Gwen::Margin(4, 4, 4, 4));
-	Textures.Scroller.TrackH.Init(skinTexture, 384, 128, 127, 15, Gwen::Margin(4, 4, 4, 4));
-	Textures.Scroller.ButtonH_Normal.Init(skinTexture, 384, 128 + 16, 127, 15, Gwen::Margin(4, 4, 4, 4));
-	Textures.Scroller.ButtonH_Hover.Init(skinTexture, 384, 128 + 32, 127, 15, Gwen::Margin(4, 4, 4, 4));
-	Textures.Scroller.ButtonH_Down.Init(skinTexture, 384, 128 + 48, 127, 15, Gwen::Margin(4, 4, 4, 4));
-	Textures.Scroller.ButtonH_Disabled.Init(skinTexture, 384, 128 + 64, 127, 15, Gwen::Margin(4, 4, 4, 4));
-	Textures.Input.ListBox.Background.Init(skinTexture, 256, 256, 63, 127, Gwen::Margin(8, 8, 8, 8));
-	Textures.Input.ListBox.Hovered.Init(skinTexture, 320, 320, 31, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Input.ListBox.EvenLine.Init(skinTexture, 352, 256, 31, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Input.ListBox.OddLine.Init(skinTexture, 352, 288, 31, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Input.ListBox.EvenLineSelected.Init(skinTexture, 320, 256, 31, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Input.ListBox.OddLineSelected.Init(skinTexture, 320, 288, 31, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Input.ComboBox.Normal.Init(skinTexture, 384, 336, 127, 31, Gwen::Margin(8, 8, 32, 8));
-	Textures.Input.ComboBox.Hover.Init(skinTexture, 384, 336 + 32, 127, 31, Gwen::Margin(8, 8, 32, 8));
-	Textures.Input.ComboBox.Down.Init(skinTexture, 384, 336 + 64, 127, 31, Gwen::Margin(8, 8, 32, 8));
-	Textures.Input.ComboBox.Disabled.Init(skinTexture, 384, 336 + 96, 127, 31, Gwen::Margin(8, 8, 32, 8));
-	Textures.Input.ComboBox.Button.Normal.Init(skinTexture, 496, 272, 15, 15);
-	Textures.Input.ComboBox.Button.Hover.Init(skinTexture, 496, 272 + 16, 15, 15);
-	Textures.Input.ComboBox.Button.Down.Init(skinTexture, 496, 272 + 32, 15, 15);
-	Textures.Input.ComboBox.Button.Disabled.Init(skinTexture, 496, 272 + 48, 15, 15);
-	Textures.Input.UpDown.Up.Normal.Init(skinTexture, 384, 112, 7, 7);
-	Textures.Input.UpDown.Up.Hover.Init(skinTexture, 384 + 8, 112, 7, 7);
-	Textures.Input.UpDown.Up.Down.Init(skinTexture, 384 + 16, 112, 7, 7);
-	Textures.Input.UpDown.Up.Disabled.Init(skinTexture, 384 + 24, 112, 7, 7);
-	Textures.Input.UpDown.Down.Normal.Init(skinTexture, 384, 120, 7, 7);
-	Textures.Input.UpDown.Down.Hover.Init(skinTexture, 384 + 8, 120, 7, 7);
-	Textures.Input.UpDown.Down.Down.Init(skinTexture, 384 + 16, 120, 7, 7);
-	Textures.Input.UpDown.Down.Disabled.Init(skinTexture, 384 + 24, 120, 7, 7);
-	Textures.ProgressBar.Back.Init(skinTexture, 384, 0, 31, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.ProgressBar.Front.Init(skinTexture, 384 + 32, 0, 31, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.Input.Slider.H.Normal.Init(skinTexture, 416, 32, 15, 15);
-	Textures.Input.Slider.H.Hover.Init(skinTexture, 416, 32 + 16, 15, 15);
-	Textures.Input.Slider.H.Down.Init(skinTexture, 416, 32 + 32, 15, 15);
-	Textures.Input.Slider.H.Disabled.Init(skinTexture, 416, 32 + 48, 15, 15);
-	Textures.Input.Slider.V.Normal.Init(skinTexture, 416 + 16, 32, 15, 15);
-	Textures.Input.Slider.V.Hover.Init(skinTexture, 416 + 16, 32 + 16, 15, 15);
-	Textures.Input.Slider.V.Down.Init(skinTexture, 416 + 16, 32 + 32, 15, 15);
-	Textures.Input.Slider.V.Disabled.Init(skinTexture, 416 + 16, 32 + 48, 15, 15);
-	Textures.CategoryList.Outer.Init(skinTexture, 256, 384, 63, 63, Gwen::Margin(8, 8, 8, 8));
-	Textures.CategoryList.Inner.Init(skinTexture, 256 + 64, 384, 63, 63, Gwen::Margin(8, 21, 8, 8));
-	Textures.CategoryList.Header.Init(skinTexture, 320, 352, 63, 31, Gwen::Margin(8, 8, 8, 8));
-	Textures.GroupBox.Init(skinTexture, 0, 448, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Scroller.TrackV.Init(SkinTexture, 384, 208, 15, 127, Gwen::Margin(4, 4, 4, 4));
+	Textures.Scroller.ButtonV_Normal.Init(SkinTexture, 384 + 16, 208, 15, 127, Gwen::Margin(4, 4, 4, 4));
+	Textures.Scroller.ButtonV_Hover.Init(SkinTexture, 384 + 32, 208, 15, 127, Gwen::Margin(4, 4, 4, 4));
+	Textures.Scroller.ButtonV_Down.Init(SkinTexture, 384 + 48, 208, 15, 127, Gwen::Margin(4, 4, 4, 4));
+	Textures.Scroller.ButtonV_Disabled.Init(SkinTexture, 384 + 64, 208, 15, 127, Gwen::Margin(4, 4, 4, 4));
+	Textures.Scroller.TrackH.Init(SkinTexture, 384, 128, 127, 15, Gwen::Margin(4, 4, 4, 4));
+	Textures.Scroller.ButtonH_Normal.Init(SkinTexture, 384, 128 + 16, 127, 15, Gwen::Margin(4, 4, 4, 4));
+	Textures.Scroller.ButtonH_Hover.Init(SkinTexture, 384, 128 + 32, 127, 15, Gwen::Margin(4, 4, 4, 4));
+	Textures.Scroller.ButtonH_Down.Init(SkinTexture, 384, 128 + 48, 127, 15, Gwen::Margin(4, 4, 4, 4));
+	Textures.Scroller.ButtonH_Disabled.Init(SkinTexture, 384, 128 + 64, 127, 15, Gwen::Margin(4, 4, 4, 4));
+	Textures.Input.ListBox.Background.Init(SkinTexture, 256, 256, 63, 127, Gwen::Margin(8, 8, 8, 8));
+	Textures.Input.ListBox.Hovered.Init(SkinTexture, 320, 320, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Input.ListBox.EvenLine.Init(SkinTexture, 352, 256, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Input.ListBox.OddLine.Init(SkinTexture, 352, 288, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Input.ListBox.EvenLineSelected.Init(SkinTexture, 320, 256, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Input.ListBox.OddLineSelected.Init(SkinTexture, 320, 288, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Input.ComboBox.Normal.Init(SkinTexture, 384, 336, 127, 31, Gwen::Margin(8, 8, 32, 8));
+	Textures.Input.ComboBox.Hover.Init(SkinTexture, 384, 336 + 32, 127, 31, Gwen::Margin(8, 8, 32, 8));
+	Textures.Input.ComboBox.Down.Init(SkinTexture, 384, 336 + 64, 127, 31, Gwen::Margin(8, 8, 32, 8));
+	Textures.Input.ComboBox.Disabled.Init(SkinTexture, 384, 336 + 96, 127, 31, Gwen::Margin(8, 8, 32, 8));
+	Textures.Input.ComboBox.Button.Normal.Init(SkinTexture, 496, 272, 15, 15);
+	Textures.Input.ComboBox.Button.Hover.Init(SkinTexture, 496, 272 + 16, 15, 15);
+	Textures.Input.ComboBox.Button.Down.Init(SkinTexture, 496, 272 + 32, 15, 15);
+	Textures.Input.ComboBox.Button.Disabled.Init(SkinTexture, 496, 272 + 48, 15, 15);
+	Textures.Input.UpDown.Up.Normal.Init(SkinTexture, 384, 112, 7, 7);
+	Textures.Input.UpDown.Up.Hover.Init(SkinTexture, 384 + 8, 112, 7, 7);
+	Textures.Input.UpDown.Up.Down.Init(SkinTexture, 384 + 16, 112, 7, 7);
+	Textures.Input.UpDown.Up.Disabled.Init(SkinTexture, 384 + 24, 112, 7, 7);
+	Textures.Input.UpDown.Down.Normal.Init(SkinTexture, 384, 120, 7, 7);
+	Textures.Input.UpDown.Down.Hover.Init(SkinTexture, 384 + 8, 120, 7, 7);
+	Textures.Input.UpDown.Down.Down.Init(SkinTexture, 384 + 16, 120, 7, 7);
+	Textures.Input.UpDown.Down.Disabled.Init(SkinTexture, 384 + 24, 120, 7, 7);
+	Textures.ProgressBar.Back.Init(SkinTexture, 384, 0, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.ProgressBar.Front.Init(SkinTexture, 384 + 32, 0, 31, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.Input.Slider.H.Normal.Init(SkinTexture, 416, 32, 15, 15);
+	Textures.Input.Slider.H.Hover.Init(SkinTexture, 416, 32 + 16, 15, 15);
+	Textures.Input.Slider.H.Down.Init(SkinTexture, 416, 32 + 32, 15, 15);
+	Textures.Input.Slider.H.Disabled.Init(SkinTexture, 416, 32 + 48, 15, 15);
+	Textures.Input.Slider.V.Normal.Init(SkinTexture, 416 + 16, 32, 15, 15);
+	Textures.Input.Slider.V.Hover.Init(SkinTexture, 416 + 16, 32 + 16, 15, 15);
+	Textures.Input.Slider.V.Down.Init(SkinTexture, 416 + 16, 32 + 32, 15, 15);
+	Textures.Input.Slider.V.Disabled.Init(SkinTexture, 416 + 16, 32 + 48, 15, 15);
+	Textures.CategoryList.Outer.Init(SkinTexture, 256, 384, 63, 63, Gwen::Margin(8, 8, 8, 8));
+	Textures.CategoryList.Inner.Init(SkinTexture, 256 + 64, 384, 63, 63, Gwen::Margin(8, 21, 8, 8));
+	Textures.CategoryList.Header.Init(SkinTexture, 320, 352, 63, 31, Gwen::Margin(8, 8, 8, 8));
+	Textures.GroupBox.Init(SkinTexture, 0, 448, 31, 31, Gwen::Margin(8, 8, 8, 8));
+
+	return true;
 }
 
 

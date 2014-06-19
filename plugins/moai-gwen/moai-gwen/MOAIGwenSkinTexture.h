@@ -23,6 +23,8 @@ public:
 	void			RegisterLuaClass(MOAILuaState& state);
 	void			RegisterLuaFuncs(MOAILuaState& state);
 
+	void			Release();
+
 	Gwen::Color GetPixelColor(int x, int y, const Gwen::Color& base = Gwen::Color(255, 255, 255, 255));
 	
 	MOAIImage Image;

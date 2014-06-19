@@ -2,45 +2,27 @@
 // http://getmoai.com
 
 #include "pch.h"
-#include <moai-gwen/MOAIGwenRenderer.h>
+#include <moai-gwen/MOAIGwenRender.h>
 #include <moai-gwen/MOAIGwenSkinTexture.h>
 
 //================================================================//
 // lua
 //================================================================//
 
-int MOAIGwenRenderer::_setLoadTexture(lua_State* L)
+int MOAIGwenRender::_setLoadTexture(lua_State* L)
 {
-	MOAI_LUA_SETUP(MOAIGwenRenderer, "U")
+	MOAI_LUA_SETUP(MOAIGwenRender, "U")
 
 	self->LoadTextureCallback.SetRef(*self, state, 2);
 
 	return 0;
 }
 
-int MOAIGwenRenderer::_setFreeTexture(lua_State* L)
+int MOAIGwenRender::_setLoadFont(lua_State* L)
 {
-	MOAI_LUA_SETUP(MOAIGwenRenderer, "U")
-
-	self->FreeTextureCallback.SetRef(*self, state, 2);
-
-	return 0;
-}
-
-int MOAIGwenRenderer::_setLoadFont(lua_State* L)
-{
-	MOAI_LUA_SETUP(MOAIGwenRenderer, "U")
+	MOAI_LUA_SETUP(MOAIGwenRender, "U")
 
 	self->LoadFontCallback.SetRef(*self, state, 2);
-
-	return 0;
-}
-
-int MOAIGwenRenderer::_setFreeFont(lua_State* L)
-{
-	MOAI_LUA_SETUP(MOAIGwenRenderer, "U")
-
-	self->FreeFontCallback.SetRef(*self, state, 2);
 
 	return 0;
 }
@@ -50,7 +32,7 @@ int MOAIGwenRenderer::_setFreeFont(lua_State* L)
 //================================================================//
 
 //----------------------------------------------------------------//
-MOAIGwenRenderer::MOAIGwenRenderer()
+MOAIGwenRender::MOAIGwenRender()
  {
 	RTTI_BEGIN
 		RTTI_EXTEND ( MOAILuaObject )
@@ -58,11 +40,13 @@ MOAIGwenRenderer::MOAIGwenRenderer()
 }
 
 //----------------------------------------------------------------//
-MOAIGwenRenderer::~MOAIGwenRenderer() 
+MOAIGwenRender::~MOAIGwenRender() 
 {
+	LoadTextureCallback.Clear();
+	LoadFontCallback.Clear();
 }
 
-void MOAIGwenRenderer::RegisterLuaClass(MOAILuaState& state)
+void MOAIGwenRender::RegisterLuaClass(MOAILuaState& state)
 {
 	luaL_Reg regTable[] = 
 	{
@@ -72,43 +56,41 @@ void MOAIGwenRenderer::RegisterLuaClass(MOAILuaState& state)
 	luaL_register(state, 0, regTable);
 }
 
-void MOAIGwenRenderer::RegisterLuaFuncs(MOAILuaState& state)
+void MOAIGwenRender::RegisterLuaFuncs(MOAILuaState& state)
 {
 	MOAILuaObject::RegisterLuaFuncs(state);
 
 	luaL_Reg regTable[] =
 	{
 		{ "setLoadTexture", _setLoadTexture },
-		{ "setFreeTexture", _setFreeTexture },
 		{ "setLoadFont",    _setLoadFont },
-		{ "setFreeFont",	_setFreeFont },
 		{ NULL, NULL }
 	};
 	
 	luaL_register(state, 0, regTable);
 }
 
-void MOAIGwenRenderer::Init()
+void MOAIGwenRender::Init()
 {
 
 }
 
-void MOAIGwenRenderer::Begin() 
+void MOAIGwenRender::Begin() 
 {
-	MOAIGfxDevice::Get().SetBlendMode(ZGL_BLEND_FACTOR_ONE, ZGL_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
+	MOAIGfxDevice::Get().SetBlendMode(ZGL_BLEND_FACTOR_SRC_ALPHA, ZGL_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
 }
 
-void MOAIGwenRenderer::End()
+void MOAIGwenRender::End()
 {
 
 }
 
-void MOAIGwenRenderer::SetDrawColor(Gwen::Color color) 
+void MOAIGwenRender::SetDrawColor(Gwen::Color color) 
 {
 	MOAIGfxDevice::Get().SetPenColor((float)color.r / 255.0f, (float)color.g / 255.0f, (float)color.b / 255.0f, (float)color.a / 255.0f);
 }
 
-void MOAIGwenRenderer::DrawFilledRect(Gwen::Rect rect) 
+void MOAIGwenRender::DrawFilledRect(Gwen::Rect rect) 
 {
 	Translate(rect);
 
@@ -121,7 +103,7 @@ void MOAIGwenRenderer::DrawFilledRect(Gwen::Rect rect)
 	MOAIDraw::DrawRectFill(rect.x, rect.y, rect.x + rect.w, (rect.y + rect.h), false);
 }
 
-void MOAIGwenRenderer::StartClip() 
+void MOAIGwenRender::StartClip() 
 {
 	MOAIGfxDevice& gfxDevice = MOAIGfxDevice::Get();
 
@@ -137,14 +119,14 @@ void MOAIGwenRenderer::StartClip()
 	gfxDevice.SetScissorRect(scissor);
 }
 
-void MOAIGwenRenderer::EndClip() 
+void MOAIGwenRender::EndClip() 
 {
 	MOAIGfxDevice& gfxDevice = MOAIGfxDevice::Get();
 
 	gfxDevice.SetScissorRect();
 }
 
-void MOAIGwenRenderer::LoadTexture(Gwen::Texture* pTexture)
+void MOAIGwenRender::LoadTexture(Gwen::Texture* pTexture)
 {
 	MOAIScopedLuaState state = MOAILuaRuntime::Get().State();
 
@@ -171,10 +153,8 @@ void MOAIGwenRenderer::LoadTexture(Gwen::Texture* pTexture)
 	this->LuaRetain(texture);
 }
 
-void MOAIGwenRenderer::FreeTexture(Gwen::Texture* pTexture)
+void MOAIGwenRender::FreeTexture(Gwen::Texture* pTexture)
 {
-	MOAIScopedLuaState state = MOAILuaRuntime::Get().State();
-
 	MOAITexture* texture = (MOAITexture*)pTexture->data;
 
 	if (!texture)
@@ -182,21 +162,15 @@ void MOAIGwenRenderer::FreeTexture(Gwen::Texture* pTexture)
 		return;
 	}
 
-	if (FreeTextureCallback.PushRef(state))
-	{
-		state.Push(texture);
-		state.DebugCall(1, 0);
-	}
-
 	this->LuaRelease(texture);
 }
 
-void MOAIGwenRenderer::DrawTexturedRect(Gwen::Texture* pTexture, Gwen::Rect rect, float u1, float v1, float u2, float v2)
+void MOAIGwenRender::DrawTexturedRect(Gwen::Texture* pTexture, Gwen::Rect rect, float u1, float v1, float u2, float v2)
 {
 	DrawTexturedRect(pTexture ? reinterpret_cast<MOAITexture*>(pTexture->data) : NULL, rect, u1, v1, u2, v2);
 }
 
-void MOAIGwenRenderer::DrawTexturedRect(MOAITextureBase* pTexture, Gwen::Rect rect, float u1, float v1, float u2, float v2)
+void MOAIGwenRender::DrawTexturedRect(MOAITextureBase* pTexture, Gwen::Rect rect, float u1, float v1, float u2, float v2)
 {
 	if (!pTexture)
 	{
@@ -217,12 +191,12 @@ void MOAIGwenRenderer::DrawTexturedRect(MOAITextureBase* pTexture, Gwen::Rect re
 	quad.Draw();
 }
 
-void MOAIGwenRenderer::DrawMissingImage(Gwen::Rect rect)
+void MOAIGwenRender::DrawMissingImage(Gwen::Rect rect)
 {
 	DrawFilledRect(rect);
 }
 
-Gwen::Color MOAIGwenRenderer::PixelColour(Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color & col_default)
+Gwen::Color MOAIGwenRender::PixelColour(Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color & col_default)
 {
 	if (!(pTexture && pTexture->data && !pTexture->failed))
 	{
@@ -232,7 +206,7 @@ Gwen::Color MOAIGwenRenderer::PixelColour(Gwen::Texture* pTexture, unsigned int 
 	return col_default;
 }
 
-void MOAIGwenRenderer::LoadFont(Gwen::Font* pFont) 
+void MOAIGwenRender::LoadFont(Gwen::Font* pFont) 
 {
 	MOAIScopedLuaState state = MOAILuaRuntime::Get().State();
 
@@ -265,7 +239,7 @@ void MOAIGwenRenderer::LoadFont(Gwen::Font* pFont)
 	this->LuaRetain(font);
 }
 
-void MOAIGwenRenderer::FreeFont(Gwen::Font* pFont) 
+void MOAIGwenRender::FreeFont(Gwen::Font* pFont) 
 {
 	MOAIFont* font = (MOAIFont*)pFont->data;
 
@@ -277,7 +251,7 @@ void MOAIGwenRenderer::FreeFont(Gwen::Font* pFont)
 	this->LuaRelease(font);
 }
 
-void MOAIGwenRenderer::RenderText(Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString & text)
+void MOAIGwenRender::RenderText(Gwen::Font* pFont, Gwen::Point pos, const Gwen::UnicodeString & text)
 {
 	MOAIFont* font = (MOAIFont*)pFont->data;
 
@@ -308,6 +282,11 @@ void MOAIGwenRenderer::RenderText(Gwen::Font* pFont, Gwen::Point pos, const Gwen
 
 	for (u32 i = 0; i < text.length(); i++)
 	{
+		if (text.at(i) == (unsigned int)"\\n")
+		{
+			continue;
+		}
+
 		MOAIGlyph* glyph = glyphSet->GetGlyph(text.at(i));
 		
 		if (!glyph)
@@ -348,7 +327,7 @@ void MOAIGwenRenderer::RenderText(Gwen::Font* pFont, Gwen::Point pos, const Gwen
 	}
 }
 
-Gwen::Point MOAIGwenRenderer::MeasureText(Gwen::Font* pFont, const Gwen::UnicodeString & text)
+Gwen::Point MOAIGwenRender::MeasureText(Gwen::Font* pFont, const Gwen::UnicodeString & text)
 {
 	Gwen::Point result(0, 0);
 

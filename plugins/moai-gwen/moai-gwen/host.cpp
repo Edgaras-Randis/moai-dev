@@ -25,7 +25,10 @@ void MOAIGwenContextInitialize() {
 		sIsInitialized = true;
 	}
 
-	REGISTER_LUA_CLASS ( MOAIGwen )
-	REGISTER_LUA_CLASS ( MOAIGwenRenderer )
+	REGISTER_LUA_CLASS ( MOAIGwenCanvas )
+	REGISTER_LUA_CLASS ( MOAIGwenRender )
 	REGISTER_LUA_CLASS ( MOAIGwenSkinTexture )
+	REGISTER_LUA_CLASS ( MOAIGwenSkin )
+	REGISTER_LUA_CLASS ( MOAIGwenInput )
+	
 }

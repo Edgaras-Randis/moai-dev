@@ -5,6 +5,7 @@
 #define MOAIGWENSKIN_H
 
 class MOAIGwenSkinTexture;
+class MOAIGwenRender;
 
 class MOAIGwenSkin : public virtual MOAILuaObject, public Gwen::Skin::Base
 {
@@ -12,6 +13,8 @@ private:
 
 	//----------------------------------------------------------------//
 
+	static int _setRender	(lua_State* L);
+	static int _init		(lua_State* L);
 
 public:
 	DECL_LUA_FACTORY(MOAIGwenSkin)
@@ -24,7 +27,8 @@ public:
 	void			RegisterLuaFuncs(MOAILuaState& state);
 
 
-	MOAIGwenSkinTexture* skinTexture;
+	MOAILuaSharedPtr<MOAIGwenSkinTexture> SkinTexture;
+	MOAILuaSharedPtr<MOAIGwenRender>	  Render;
 
 	struct Textures_t
 	{
@@ -285,7 +289,7 @@ public:
 
 	} Textures;
 
-	virtual void Init(MOAIGwenSkinTexture* skinTexture);
+	virtual bool Init(MOAIGwenSkinTexture* skinTexture);
 
 	virtual void DrawButton(Gwen::Controls::Base* control, bool bDepressed, bool bHovered, bool bDisabled);
 

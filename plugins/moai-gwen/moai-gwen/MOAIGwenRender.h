@@ -1,26 +1,23 @@
 // Copyright (c) 2010-2011 Zipline Games, Inc. All Rights Reserved.
 // http://getmoai.com
 
-#ifndef MOAIGWENRENDERER_H
-#define MOAIGWENRENDERER_H
+#ifndef MOAIGWENRENDER_H
+#define MOAIGWENRENDER_H
 
-class MOAIGwenRenderer : public virtual MOAILuaObject, public Gwen::Renderer::Base 
+class MOAIGwenRender : public virtual MOAILuaObject, public Gwen::Renderer::Base 
 {
 private:
 	
 	//----------------------------------------------------------------//
 
-	static int	_setLoadTexture(lua_State* L);
-	static int	_setFreeTexture(lua_State* L);
-
-	static int  _setLoadFont(lua_State* L);
-	static int  _setFreeFont(lua_State* L);
+	static int	_setLoadTexture (lua_State* L);
+	static int  _setLoadFont	(lua_State* L);
 
 public:
 
 	//----------------------------------------------------------------//
 
-	DECL_LUA_FACTORY(MOAIGwenRenderer)
+	DECL_LUA_FACTORY(MOAIGwenRender)
 
 	virtual void Init();
 
@@ -48,8 +45,8 @@ public:
 	
 	//----------------------------------------------------------------//
 
-					MOAIGwenRenderer			 ();
-					~MOAIGwenRenderer			 ();
+					MOAIGwenRender			 ();
+					~MOAIGwenRender			 ();
 
 	void			RegisterLuaClass(MOAILuaState& state);
 	void			RegisterLuaFuncs(MOAILuaState& state);
@@ -57,10 +54,7 @@ public:
 private:
 
 	MOAILuaMemberRef LoadTextureCallback;
-	MOAILuaMemberRef FreeTextureCallback;
-
 	MOAILuaMemberRef LoadFontCallback;
-	MOAILuaMemberRef FreeFontCallback;
 
 	Gwen::Color m_Color;
 };

@@ -2,51 +2,44 @@
 // http://getmoai.com
 
 #include "pch.h"
-#include <moai-gwen/MOAIGwenRenderer.h>
+#include <moai-gwen/MOAIGwenRender.h>
 #include <moai-gwen/MOAIGwenSkin.h>
 #include <moai-gwen/MOAIGwenSkinTexture.h>
-#include <moai-gwen/MOAIGwen.h>
+#include <moai-gwen/MOAIGwenCanvas.h>
 
 //================================================================//
 // lua
 //================================================================//
 
-int MOAIGwen::_init(lua_State* L)
+int MOAIGwenCanvas::_init(lua_State* L)
 {
-	MOAI_LUA_SETUP(MOAIGwen, "UU");
+	MOAI_LUA_SETUP(MOAIGwenCanvas, "UU");
 
-	self->Renderer = state.GetLuaObject<MOAIGwenRenderer>(2, true);
+	self->Skin.Set(*self, state.GetLuaObject<MOAIGwenSkin>(2, true));
 
-	if (!self->Renderer)
+	if (!self->Skin)
 	{
 		return 0;
 	}
 
-	self->LuaRetain(self->Renderer);
+	self->SetSkin(self->Skin);
 
-	self->Skin = new MOAIGwenSkin();
-	self->Skin->SetRender(self->Renderer);
-	self->LuaRetain(self->Skin);
+	self->SetSize(960, 640);
+	self->SetDrawBackground(true);
+	self->SetBackgroundColor(Gwen::Color(150, 170, 170, 255));
 
-	self->Skin->Init(state.GetLuaObject<MOAIGwenSkinTexture>(3, true));
-
-	self->Canvas = new Gwen::Controls::Canvas(self->Skin);
-	self->Canvas->SetSize(960, 640);
-	self->Canvas->SetDrawBackground(true);
-	self->Canvas->SetBackgroundColor(Gwen::Color(150, 170, 170, 125));
-
-	self->pUnitTest = new UnitTest(self->Canvas);
+	self->pUnitTest = new UnitTest(self);
 	self->pUnitTest->SetPos(0, 0);
 
 	return 0;
 }
 
 //================================================================//
-// MOAIGwen
+// MOAIGwenCanvas
 //================================================================//
 
 //----------------------------------------------------------------//
-MOAIGwen::MOAIGwen() : Skin(NULL), Renderer(NULL), Canvas(NULL), pUnitTest(NULL)
+MOAIGwenCanvas::MOAIGwenCanvas() : Canvas(NULL), pUnitTest(NULL)
  {
 	RTTI_BEGIN
 		RTTI_EXTEND ( MOAIProp )
@@ -54,11 +47,12 @@ MOAIGwen::MOAIGwen() : Skin(NULL), Renderer(NULL), Canvas(NULL), pUnitTest(NULL)
 }
 
 //----------------------------------------------------------------//
-MOAIGwen::~MOAIGwen() 
+MOAIGwenCanvas::~MOAIGwenCanvas() 
 {
+	Skin.Set(*this, 0);
 }
 
-void MOAIGwen::RegisterLuaClass(MOAILuaState& state)
+void MOAIGwenCanvas::RegisterLuaClass(MOAILuaState& state)
 {
 	MOAIProp::RegisterLuaClass(state);
 
@@ -70,7 +64,7 @@ void MOAIGwen::RegisterLuaClass(MOAILuaState& state)
 	luaL_register(state, 0, regTable);
 }
 
-void MOAIGwen::RegisterLuaFuncs(MOAILuaState& state)
+void MOAIGwenCanvas::RegisterLuaFuncs(MOAILuaState& state)
 {
 	MOAIProp::RegisterLuaFuncs(state);
 
@@ -84,16 +78,16 @@ void MOAIGwen::RegisterLuaFuncs(MOAILuaState& state)
 	luaL_register(state, 0, regTable);
 }
 
-int MOAIGwen::_render(lua_State* L)
+int MOAIGwenCanvas::_render(lua_State* L)
 {
-	MOAI_LUA_SETUP(MOAIGwen, "U");
+	MOAI_LUA_SETUP(MOAIGwenCanvas, "U");
 
-	if (!self->Canvas)
+	if (!self->Skin)
 	{
 		return 0;
 	}
 
-	self->Canvas->RenderCanvas();
+	self->RenderCanvas();
 
 	return 0;
 }

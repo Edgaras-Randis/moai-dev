@@ -5,9 +5,10 @@
 #define MOAIGWEN_H
 
 class MOAIGwenSkin;
-class MOAIGwenRenderer;
+class MOAIGwenRender;
 
-class MOAIGwen : public virtual MOAIProp {
+class MOAIGwenCanvas : public virtual MOAIProp, public virtual Gwen::Controls::Canvas
+{
 private:
 	
 	//----------------------------------------------------------------//
@@ -16,21 +17,18 @@ private:
 	static int _render(lua_State* L);
 
 public:
-	DECL_LUA_FACTORY(MOAIGwen)
+	DECL_LUA_FACTORY(MOAIGwenCanvas)
 	
 	//----------------------------------------------------------------//
-					MOAIGwen			 ();
-					~MOAIGwen			 ();
+					MOAIGwenCanvas			 ();
+					~MOAIGwenCanvas			 ();
 
 	void			RegisterLuaClass(MOAILuaState& state);
 	void			RegisterLuaFuncs(MOAILuaState& state);
 
 private:
 
-	MOAIGwenSkin* Skin;
-	
-	MOAIGwenRenderer* Renderer;
-	Gwen::Controls::Canvas* Canvas;
+	MOAILuaSharedPtr<MOAIGwenSkin> Skin;
 
 	UnitTest* pUnitTest;
 };
