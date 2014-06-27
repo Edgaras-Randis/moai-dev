@@ -7,6 +7,8 @@
 #include <Gwen/Skin.h>
 #include <Gwen/Gwen.h>
 #include <Gwen/Controls/Base.h>
+#include <Gwen/Controls.h>
+#include <Gwen/Controls/CollapsibleList.h>
 #include <Gwen/Texture.h>
 #include <Gwen/Skins/Texturing.h>
 #include <Gwen/UnitTest/UnitTest.h>

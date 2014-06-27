@@ -6,10 +6,21 @@
 
 #include <moai-gwen/pch.h>
 
+#include <moai-gwen/MOAIGwenBase.h>
 #include <moai-gwen/MOAIGwenCanvas.h>
 #include <moai-gwen/MOAIGwenRender.h>
 #include <moai-gwen/MOAIGwenSkin.h>
 #include <moai-gwen/MOAIGwenSkinTexture.h>
 #include <moai-gwen/MOAIGwenInput.h>
+
+#include <moai-gwen/MOAIGwenEvent.h>
+
+#include <moai-gwen/MOAIGwenLabel.h>
+#include <moai-gwen/MOAIGwenButton.h>
+#include <moai-gwen/MOAIGwenDockBase.h>
+#include <moai-gwen/MOAIGwenCollapsibleList.h>
+#include <moai-gwen/MOAIGwenCollapsibleCategory.h>
+
+#include <moai-gwen/MOAIGwenRegister.h>
 
 #endif

@@ -30,5 +30,9 @@ void MOAIGwenContextInitialize() {
 	REGISTER_LUA_CLASS ( MOAIGwenSkinTexture )
 	REGISTER_LUA_CLASS ( MOAIGwenSkin )
 	REGISTER_LUA_CLASS ( MOAIGwenInput )
-	
+	REGISTER_LUA_CLASS ( MOAIGwenLabel )
+	REGISTER_LUA_CLASS ( MOAIGwenButton )
+	REGISTER_LUA_CLASS ( MOAIGwenDockBase )
+	REGISTER_LUA_CLASS ( MOAIGwenCollapsibleList )
+	REGISTER_LUA_CLASS ( MOAIGwenCollapsibleCategory )
 }

@@ -60,7 +60,7 @@ namespace Gwen
 
 				typedef std::map<Gwen::UnicodeString, Gwen::Event::Caller*> AccelMap;
 
-				Base( Base* pParent, const Gwen::String & Name = "" );
+				Base( Base* pParent, const Gwen::String & Name = "", void* Data = NULL);
 				virtual ~Base();
 
 				virtual const char* GetTypeName() { return "Base"; }
@@ -89,6 +89,7 @@ namespace Gwen
 
 			protected:
 
+				virtual void Setup() {}
 				virtual void AddChild( Controls::Base* pChild );
 				virtual void RemoveChild( Controls::Base* pParent );
 				virtual void OnChildAdded( Controls::Base* pChild );
@@ -583,13 +584,13 @@ T* Gwen::Controls::Base::FindChild( const Gwen::String & name, bool bRecursive )
 	GWEN_DYNAMIC( ThisName, BaseName )\
 	virtual const char* GetTypeName(){ return #ThisName; }\
 	virtual const char* GetBaseTypeName(){ return BaseClass::GetTypeName(); }\
-	ThisName( Gwen::Controls::Base* pParent, const Gwen::String& pName = "" )
+	ThisName( Gwen::Controls::Base* pParent, const Gwen::String& pName = "", void* Data = NULL )
 
 #define GWEN_CONTROL_INLINE( ThisName, BaseName )\
-	GWEN_CONTROL( ThisName, BaseName ) : BaseClass( pParent, pName )
+	GWEN_CONTROL( ThisName, BaseName ) : BaseClass( pParent, pName, Data )
 
 #define GWEN_CONTROL_CONSTRUCTOR( ThisName )\
-	ThisName::ThisName( Gwen::Controls::Base* pParent, const Gwen::String& pName ) : BaseClass( pParent, pName )
+	ThisName::ThisName( Gwen::Controls::Base* pParent, const Gwen::String& pName, void* Data ) : BaseClass( pParent, pName, Data )
 
 
 

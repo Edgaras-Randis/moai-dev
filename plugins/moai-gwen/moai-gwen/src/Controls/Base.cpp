@@ -23,8 +23,13 @@
 using namespace Gwen;
 using namespace Controls;
 
-Base::Base( Base* pParent, const Gwen::String & Name )
+Base::Base(Base* pParent, const Gwen::String & Name, void* Data)
 {
+	if (Data != NULL)
+	{
+		UserData.Set("Data", Data);
+	}
+
 	m_Parent = NULL;
 	m_ActualParent = NULL;
 	m_InnerPanel = NULL;

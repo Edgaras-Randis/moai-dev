@@ -95,5 +95,5 @@ Gwen::Color MOAIGwenSkinTexture::GetPixelColor(int x, int y, const Gwen::Color& 
 
 void MOAIGwenSkinTexture::Release()
 {
-	MOAITexture::Release(); //fix for ambiguity on MOAISharedPtr, because Gwen::Texture also has Release method
+	MOAITexture::Release(); //fix for ambiguity on MOAILuaSharedPtr, because Gwen::Texture also has Release method
 }

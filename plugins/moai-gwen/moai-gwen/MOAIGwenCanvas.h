@@ -7,7 +7,9 @@
 class MOAIGwenSkin;
 class MOAIGwenRender;
 
-class MOAIGwenCanvas : public virtual MOAIProp, public virtual Gwen::Controls::Canvas
+#include <moai-gwen/MOAIGwenBase.h>
+
+class MOAIGwenCanvas : public virtual MOAIProp, public virtual MOAIGwenBase, public Gwen::Controls::Canvas
 {
 private:
 	
@@ -25,6 +27,17 @@ public:
 
 	void			RegisterLuaClass(MOAILuaState& state);
 	void			RegisterLuaFuncs(MOAILuaState& state);
+
+	void			SerializeIn(MOAILuaState& state, MOAIDeserializer& serializer);
+	void			SerializeOut(MOAILuaState& state, MOAISerializer& serializer);
+
+	Gwen::Controls::Base* Base();
+
+protected:
+
+	virtual void OnChildAdded(Gwen::Controls::Base* pChild);
+	virtual void OnChildRemoved(Gwen::Controls::Base* pChild);
+
 
 private:
 

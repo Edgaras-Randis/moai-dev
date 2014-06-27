@@ -7,10 +7,11 @@ project ( moai-gwen )
   set ( PLUGIN_INCLUDES 
         ${PLUGIN_ROOT}/../
 	${PLUGIN_ROOT}/include
+	${PLUGIN_ROOT}/UnitTest
   )
 
   # Use all cpp files in directory as source code
-  file ( GLOB_RECURSE PLUGIN_SRC ${PLUGIN_ROOT}/*.cpp ${PLUGIN_ROOT}/UnitTest/*.cpp ${PLUGIN_ROOT}/*.h )
+  file ( GLOB_RECURSE PLUGIN_SRC ${PLUGIN_ROOT}/*.cpp ${PLUGIN_ROOT}/*.h )
 
 
   add_library ( moai-gwen STATIC ${PLUGIN_SRC} )
