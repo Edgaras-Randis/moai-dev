@@ -7,8 +7,6 @@
 #define MOAI_GWEN_REGISTER_SETUP(type, str) MOAI_LUA_SETUP(MOAIGwenBase, str) type* Control = self->Cast<type>(STRINGIFY(type)); if(!Control) return 0;
 
 //================================================================//
-// lua
-//================================================================//
 
 int MOAIGwenRegisterLabel::_setText(lua_State* L)
 {
@@ -72,9 +70,7 @@ void MOAIGwenRegisterLabel::RegisterLuaFuncs(MOAILuaState& state)
 	luaL_register(state, 0, regTable);
 }
 
-
-
-
+//================================================================//
 
 int MOAIGwenRegisterButton::_setImage(lua_State* L)
 {
@@ -115,6 +111,7 @@ void MOAIGwenRegisterButton::RegisterLuaFuncs(MOAILuaState& state)
 	luaL_register(state, 0, regTable);
 }
 
+//================================================================//
 
 void MOAIGwenRegisterDockBase::RegisterLuaClass(MOAILuaState& state)
 {
@@ -125,6 +122,102 @@ void MOAIGwenRegisterDockBase::RegisterLuaFuncs(MOAILuaState& state)
 {
 	luaL_Reg regTable[] =
 	{
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
+
+//================================================================//
+
+int MOAIGwenRegisterCollapsibleList::_add(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::CollapsibleList, "US");
+
+	Gwen::Controls::CollapsibleCategory* Category = Control->Add(state.GetValue<cc8*>(2, ""));
+
+	if (!Category->UserData.Exists("Data"))
+	{
+		return 0;
+	}
+
+	state.Push(Category->UserData.Get<MOAIGwenBase*>("Data"));
+
+	return 1;
+}
+
+int MOAIGwenRegisterCollapsibleList::_addCategory(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::CollapsibleList, "UU");
+
+	MOAIGwenCollapsibleCategory* Category = state.GetLuaObject<MOAIGwenCollapsibleCategory>(2, true);
+
+	if (!Category)
+	{
+		return 0;
+	}
+
+	Control->Add(Category->Control());
+
+	return 0;
+}
+
+void MOAIGwenRegisterCollapsibleList::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterCollapsibleList::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "add", _add },
+		{ "addCategory", _addCategory },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
+
+//================================================================//
+
+int MOAIGwenRegisterCollapsibleCategory::_setText(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::CollapsibleCategory, "U");
+
+	Control->SetText(state.GetValue<cc8*>(2, ""));
+
+	return 0;
+}
+
+int MOAIGwenRegisterCollapsibleCategory::_add(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::CollapsibleCategory, "US");
+
+	Gwen::Controls::Button* Button = Control->Add(state.GetValue<cc8*>(2, ""));
+
+	if (!Button->UserData.Exists("Data"))
+	{
+		return 0;
+	}
+
+	state.Push(Button->UserData.Get<MOAIGwenBase*>("Data"));
+
+	return 1;
+}
+
+
+void MOAIGwenRegisterCollapsibleCategory::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterCollapsibleCategory::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "setText", _setText },
+		{ "add",	 _add },
 		{ NULL, NULL }
 	};
 

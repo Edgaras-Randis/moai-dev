@@ -3,6 +3,7 @@
 
 #include "pch.h"
 #include <moai-gwen/MOAIGwenRegister.h>
+#include <moai-gwen/MOAIGwenCollapsibleCategory.h>
 #include <moai-gwen/MOAIGwenCollapsibleList.h>
 
 //================================================================//
@@ -30,11 +31,11 @@ MOAIGwenCollapsibleList::~MOAIGwenCollapsibleList()
 void MOAIGwenCollapsibleList::RegisterLuaClass(MOAILuaState& state)
 {
 	MOAIGwenControl::RegisterLuaClass(state);
-	MOAIGwenRegisterDockBase::RegisterLuaClass(state);
+	MOAIGwenRegisterCollapsibleList::RegisterLuaClass(state);
 }
 
 void MOAIGwenCollapsibleList::RegisterLuaFuncs(MOAILuaState& state)
 {
 	MOAIGwenControl::RegisterLuaFuncs(state);
-	MOAIGwenRegisterDockBase::RegisterLuaFuncs(state);
+	MOAIGwenRegisterCollapsibleList::RegisterLuaFuncs(state);
 }

@@ -555,7 +555,26 @@ public:
 
 	MOAIGwenControlBase(Gwen::Controls::Base* pParent, const Gwen::String & Name = "", MOAIGwenBase* Base = NULL) : T(pParent, Name, (void*)Base), Cannary(Base)
 	{
-		
+		//Need to retain on constructor, because v-table was not constructed yet
+
+		if (!(pParent && pParent->UserData.Exists("Data")))
+		{
+			return;
+		}
+
+		MOAIGwenBase* ParentBase = static_cast<MOAIGwenBase*>(pParent->UserData.Get<void*>("Data"));
+
+		if (!(ParentBase && Cannary))
+		{
+			return;
+		}
+
+		ParentBase->LuaRetain(Cannary);
+	}
+
+	virtual void SetParent(Gwen::Controls::Base* pParent)
+	{
+		T::SetParent(pParent);
 	}
 
 	virtual void OnChildAdded(Gwen::Controls::Base* pChild)
@@ -596,12 +615,12 @@ public:
 		Cannary->LuaRelease(base);
 	}
 
-private:
+protected:
 
 	MOAIGwenBase* Cannary;
 };
 
-template<typename T>
+template<typename T, template<typename> class ControlBase = MOAIGwenControlBase>
 class MOAIGwenControl : public MOAIGwenBase
 {
 public:
@@ -621,7 +640,7 @@ public:
 			Data = NULL;
 		}
 
-		Data = new MOAIGwenControlBase<T>(parent->Base(), name, (MOAIGwenBase*)this);
+		Data = new ControlBase<T>(parent->Base(), name, (MOAIGwenBase*)this);
 
 		RegisterEvent();
 	}
@@ -640,7 +659,7 @@ public:
 		}
 	}
 
-	MOAIGwenControlBase<T>* Control()
+	ControlBase<T>* Control()
 	{
 		return Data;
 	}
@@ -652,7 +671,7 @@ public:
 
 protected:
 
-	MOAIGwenControlBase<T>* Data;
+	ControlBase<T>* Data;
 };
 
 #endif

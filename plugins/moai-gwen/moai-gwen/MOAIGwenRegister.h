@@ -50,4 +50,33 @@ public:
 	static void	RegisterLuaFuncs(MOAILuaState& state);
 };
 
+class MOAIGwenRegisterCollapsibleList
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _add(lua_State* L);
+	static int _addCategory(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
+class MOAIGwenRegisterCollapsibleCategory
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _setText(lua_State* L);
+	static int _add(lua_State* L);
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
 #endif

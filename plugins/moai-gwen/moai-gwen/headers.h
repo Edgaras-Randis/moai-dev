@@ -19,7 +19,9 @@
 #include <moai-gwen/MOAIGwenButton.h>
 #include <moai-gwen/MOAIGwenDockBase.h>
 #include <moai-gwen/MOAIGwenCollapsibleList.h>
+#include <moai-gwen/MOAIGwenCategoryButton.h>
 #include <moai-gwen/MOAIGwenCollapsibleCategory.h>
+
 
 #include <moai-gwen/MOAIGwenRegister.h>
 

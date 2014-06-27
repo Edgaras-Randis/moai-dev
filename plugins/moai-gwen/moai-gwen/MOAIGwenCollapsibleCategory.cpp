@@ -29,9 +29,11 @@ MOAIGwenCollapsibleCategory::~MOAIGwenCollapsibleCategory()
 void MOAIGwenCollapsibleCategory::RegisterLuaClass(MOAILuaState& state)
 {
 	MOAIGwenControl::RegisterLuaClass(state);
+	MOAIGwenRegisterCollapsibleCategory::RegisterLuaClass(state);
 }
 
 void MOAIGwenCollapsibleCategory::RegisterLuaFuncs(MOAILuaState& state)
 {
 	MOAIGwenControl::RegisterLuaFuncs(state);
+	MOAIGwenRegisterCollapsibleCategory::RegisterLuaFuncs(state);
 }

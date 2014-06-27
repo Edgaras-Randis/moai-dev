@@ -20,6 +20,71 @@ namespace Gwen
 	{
 		class CollapsibleList;
 
+		class GWEN_EXPORT CategoryButton : public Button
+		{
+			GWEN_CONTROL_INLINE(CategoryButton, Button)
+			{
+				SetAlignment(Pos::Left | Pos::CenterV);
+				m_bAlt = false;
+			}
+
+			virtual void Render(Skin::Base* skin)
+			{
+				if (m_bAlt)
+				{
+					if (IsDepressed() || GetToggleState()) { skin->GetRender()->SetDrawColor(skin->Colors.Category.LineAlt.Button_Selected); }
+					else if (IsHovered()) { skin->GetRender()->SetDrawColor(skin->Colors.Category.LineAlt.Button_Hover); }
+					else { skin->GetRender()->SetDrawColor(skin->Colors.Category.LineAlt.Button); }
+				}
+				else
+				{
+					if (IsDepressed() || GetToggleState()) { skin->GetRender()->SetDrawColor(skin->Colors.Category.Line.Button_Selected); }
+					else if (IsHovered()) { skin->GetRender()->SetDrawColor(skin->Colors.Category.Line.Button_Hover); }
+					else { skin->GetRender()->SetDrawColor(skin->Colors.Category.Line.Button); }
+				}
+
+				skin->GetRender()->DrawFilledRect(this->GetRenderBounds());
+			}
+
+			void UpdateColours()
+			{
+				if (m_bAlt)
+				{
+					if (IsDepressed() || GetToggleState())	{ return SetTextColor(GetSkin()->Colors.Category.LineAlt.Text_Selected); }
+
+					if (IsHovered())							{ return SetTextColor(GetSkin()->Colors.Category.LineAlt.Text_Hover); }
+
+					return SetTextColor(GetSkin()->Colors.Category.LineAlt.Text);
+				}
+
+				if (IsDepressed() || GetToggleState())	{ return SetTextColor(GetSkin()->Colors.Category.Line.Text_Selected); }
+
+				if (IsHovered())							{ return SetTextColor(GetSkin()->Colors.Category.Line.Text_Hover); }
+
+				return SetTextColor(GetSkin()->Colors.Category.Line.Text);
+			}
+
+			bool m_bAlt;
+		};
+
+		class GWEN_EXPORT CategoryHeaderButton : public Button
+		{
+			GWEN_CONTROL_INLINE(CategoryHeaderButton, Button)
+			{
+				SetShouldDrawBackground(false);
+				SetIsToggle(true);
+				SetAlignment(Pos::Center);
+			}
+
+			void UpdateColours()
+			{
+				if (IsDepressed() || GetToggleState())	{ return SetTextColor(GetSkin()->Colors.Category.Header_Closed); }
+
+				return SetTextColor(GetSkin()->Colors.Category.Header);
+			}
+
+		};
+
 		class GWEN_EXPORT CollapsibleCategory : public Gwen::Controls::Base
 		{
 			public:

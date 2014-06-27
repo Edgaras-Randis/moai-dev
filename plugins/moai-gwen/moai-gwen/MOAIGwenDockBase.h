@@ -7,7 +7,17 @@
 #include <moai-gwen/MOAIGwenBase.h>
 #include <moai-gwen/MOAIGwenEvent.h>
 
-class MOAIGwenDockBase : public MOAIGwenControl<Gwen::Controls::DockBase>
+template<typename T>
+class MOAIGwenDockBaseBase : public MOAIGwenControlBase<T>
+{
+public:
+	MOAIGwenDockBaseBase(Gwen::Controls::Base* pParent, const Gwen::String& Name = "", MOAIGwenBase* Base = NULL) : MOAIGwenControlBase<T>(pParent, Name, Base)
+	{
+
+	}
+};
+
+class MOAIGwenDockBase : public MOAIGwenControl<Gwen::Controls::DockBase, MOAIGwenDockBaseBase>
 {
 private:
 	

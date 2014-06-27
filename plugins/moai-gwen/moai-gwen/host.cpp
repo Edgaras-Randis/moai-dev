@@ -35,4 +35,5 @@ void MOAIGwenContextInitialize() {
 	REGISTER_LUA_CLASS ( MOAIGwenDockBase )
 	REGISTER_LUA_CLASS ( MOAIGwenCollapsibleList )
 	REGISTER_LUA_CLASS ( MOAIGwenCollapsibleCategory )
+	REGISTER_LUA_CLASS ( MOAIGwenCategoryButton )
 }

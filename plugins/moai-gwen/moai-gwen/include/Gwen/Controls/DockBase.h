@@ -38,7 +38,7 @@ namespace Gwen
 				// No action on space (default button action is to press)
 				virtual bool OnKeySpace( bool /*bDown*/ ) { return false; }
 
-			private:
+			protected:
 
 				// Drag n Drop
 				virtual bool DragAndDrop_HandleDrop( Gwen::DragAndDrop::Package* pPackage, int x, int y );
@@ -56,9 +56,10 @@ namespace Gwen
 				virtual int GetDroppedTabDirection( int x, int y );
 				virtual void OnTabRemoved( Gwen::Controls::Base* pControl );
 
-				DockBase* GetChildDock( int iPos );
-				DockBase** GetChildDockPtr( int iPos );
+				virtual DockBase* GetChildDock( int iPos );
+				virtual DockBase** GetChildDockPtr( int iPos );
 
+			private:
 				DockBase*		m_Left;
 				DockBase*		m_Right;
 				DockBase*		m_Top;
