@@ -4,6 +4,7 @@
 #ifndef MOAIGwenCollapsibleCategory_H
 #define MOAIGwenCollapsibleCategory_H
 
+#include <moai-gwen/MOAIGwenRegister.h>
 #include <moai-gwen/MOAIGwenBase.h>
 #include <moai-gwen/MOAIGwenEvent.h>
 #include <moai-gwen/MOAIGwenCategoryButton.h>
@@ -41,11 +42,27 @@ public:
 	DECL_GWEN_LUA_FACTORY(MOAIGwenCollapsibleCategory)
 
 	//----------------------------------------------------------------//
-					MOAIGwenCollapsibleCategory();
-				   ~MOAIGwenCollapsibleCategory();
+	MOAIGwenCollapsibleCategory()
+	{
+		RTTI_BEGIN
+			RTTI_EXTEND(MOAIGwenBase)
+		RTTI_END
 
-	void			RegisterLuaClass(MOAILuaState& state);
-	void			RegisterLuaFuncs(MOAILuaState& state);
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Base));
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::CollapsibleCategory));
+	}
+
+	void RegisterLuaClass(MOAILuaState& state)
+	{
+		MOAIGwenControl::RegisterLuaClass(state);
+		MOAIGwenRegisterCollapsibleCategory::RegisterLuaClass(state);
+	}
+
+	void RegisterLuaFuncs(MOAILuaState& state)
+	{
+		MOAIGwenControl::RegisterLuaFuncs(state);
+		MOAIGwenRegisterCollapsibleCategory::RegisterLuaFuncs(state);
+	}
 };
 
 #endif

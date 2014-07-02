@@ -100,7 +100,7 @@ void MOAIGwenRender::DrawFilledRect(Gwen::Rect rect)
 	gfxDevice.SetShaderPreset(MOAIShaderMgr::LINE_SHADER);
 	gfxDevice.SetVertexPreset(MOAIVertexFormatMgr::XYZWC);
 
-	MOAIDraw::DrawRectFill(rect.x, rect.y, rect.x + rect.w, (rect.y + rect.h), false);
+	MOAIDraw::DrawRectFill(rect.x, rect.y, rect.x + rect.w, (rect.y + rect.h));
 }
 
 void MOAIGwenRender::StartClip() 
@@ -172,7 +172,7 @@ void MOAIGwenRender::DrawTexturedRect(Gwen::Texture* pTexture, Gwen::Rect rect, 
 
 void MOAIGwenRender::DrawTexturedRect(MOAITextureBase* pTexture, Gwen::Rect rect, float u1, float v1, float u2, float v2)
 {
-	if (!pTexture)
+	if (!(pTexture && pTexture->LoadGfxState()))
 	{
 		DrawMissingImage(rect);
 	}
@@ -196,13 +196,8 @@ void MOAIGwenRender::DrawMissingImage(Gwen::Rect rect)
 	DrawFilledRect(rect);
 }
 
-Gwen::Color MOAIGwenRender::PixelColour(Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color & col_default)
+Gwen::Color MOAIGwenRender::PixelColour(Gwen::Texture* pTexture, unsigned int x, unsigned int y, const Gwen::Color& col_default)
 {
-	if (!(pTexture && pTexture->data && !pTexture->failed))
-	{
-		return col_default;
-	}
-
 	return col_default;
 }
 

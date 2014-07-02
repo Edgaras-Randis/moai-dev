@@ -3,14 +3,14 @@
 
 #include "pch.h"
 #include <moai-gwen/MOAIGwenRegister.h>
-#include <moai-gwen/MOAIGwenButton.h>
+#include <moai-gwen/MOAIGwenTabButton.h>
 
 //================================================================//
 // lua
 //================================================================//
 
 //----------------------------------------------------------------//
-MOAIGwenButton::MOAIGwenButton()
+MOAIGwenTabButton::MOAIGwenTabButton()
 {
 	RTTI_BEGIN
 		RTTI_EXTEND(MOAIGwenBase)
@@ -19,29 +19,30 @@ MOAIGwenButton::MOAIGwenButton()
 	RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Base));
 	RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Label));
 	RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Button));
+	RTTI_CAST.insert(STRINGIFY(Gwen::Controls::TabButton));
 }
 
 //----------------------------------------------------------------//
-MOAIGwenButton::~MOAIGwenButton() 
+MOAIGwenTabButton::~MOAIGwenTabButton() 
 {
 
 }
 
-void MOAIGwenButton::RegisterLuaClass(MOAILuaState& state)
+void MOAIGwenTabButton::RegisterLuaClass(MOAILuaState& state)
 {
 	MOAIGwenControl::RegisterLuaClass(state);
 	MOAIGwenRegisterButton::RegisterLuaClass(state);
 	MOAIGwenEventButton::RegisterLuaClass(state);
 }
 
-void MOAIGwenButton::RegisterLuaFuncs(MOAILuaState& state)
+void MOAIGwenTabButton::RegisterLuaFuncs(MOAILuaState& state)
 {
 	MOAIGwenControl::RegisterLuaFuncs(state);
 	MOAIGwenRegisterButton::RegisterLuaFuncs(state);
 	MOAIGwenEventButton::RegisterLuaFuncs(state);
 }
 
-void MOAIGwenButton::RegisterEvent()
+void MOAIGwenTabButton::RegisterEvent()
 {
 	MOAIGwenEventButton::SetBase(this);
 	MOAIGwenEventButton::RegisterEvents();

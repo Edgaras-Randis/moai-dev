@@ -38,8 +38,6 @@ namespace Gwen
 				// No action on space (default button action is to press)
 				virtual bool OnKeySpace( bool /*bDown*/ ) { return false; }
 
-			protected:
-
 				// Drag n Drop
 				virtual bool DragAndDrop_HandleDrop( Gwen::DragAndDrop::Package* pPackage, int x, int y );
 				virtual bool DragAndDrop_CanAcceptPackage( Gwen::DragAndDrop::Package* pPackage );
@@ -59,7 +57,7 @@ namespace Gwen
 				virtual DockBase* GetChildDock( int iPos );
 				virtual DockBase** GetChildDockPtr( int iPos );
 
-			private:
+			protected:
 				DockBase*		m_Left;
 				DockBase*		m_Right;
 				DockBase*		m_Top;

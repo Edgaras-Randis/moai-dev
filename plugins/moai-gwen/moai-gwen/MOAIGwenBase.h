@@ -375,6 +375,15 @@ private:
 		return 0;
 	}
 
+	static int _dock(lua_State* L)
+	{
+		MOAI_GWEN_BASE_SETUP("UN");
+
+		base->Dock(state.GetValue<int>(2, Gwen::Pos::None));
+
+		return 0;
+	}
+
 	static int _isTabable(lua_State* L)
 	{
 		MOAI_GWEN_BASE_SETUP("U");
@@ -393,6 +402,38 @@ private:
 		return 0;
 	}
 
+	static int _setMargin(lua_State* L)
+	{
+		MOAI_GWEN_BASE_SETUP("U");
+
+		Gwen::Margin Value;
+
+		Value.left = state.GetValue<int>(2, 0);
+		Value.top  = state.GetValue<int>(3, 0);
+		Value.right  = state.GetValue<int>(4, 0);
+		Value.bottom = state.GetValue<int>(5, 0);
+
+		base->SetMargin(Value);
+
+		return 0;
+	}
+
+	static int _setPadding(lua_State* L)
+	{
+		MOAI_GWEN_BASE_SETUP("U");
+
+		Gwen::Padding Value;
+
+		Value.left = state.GetValue<int>(2, 0);
+		Value.top  = state.GetValue<int>(3, 0);
+		Value.right  = state.GetValue<int>(4, 0);
+		Value.bottom = state.GetValue<int>(5, 0);
+
+		base->SetPadding(Value);
+
+		return 0;
+	}
+
 	static int _setToolTip(lua_State* L)
 	{
 		MOAI_GWEN_BASE_SETUP("U");
@@ -401,8 +442,6 @@ private:
 
 		return 0;
 	}
-
-	
 
 	static int _setDisabled(lua_State* L)
 	{
@@ -429,6 +468,15 @@ private:
 		MOAIGwenBase* parent = state.GetLuaObject<MOAIGwenBase>(2, true);
 
 		base->SetParent(parent ? parent->Base() : NULL);
+
+		return 0;
+	}
+
+	static int _sizeToChildren(lua_State* L)
+	{
+		MOAI_GWEN_BASE_SETUP("U");
+
+		base->SizeToChildren(state.GetValue<bool>(2, false), state.GetValue<bool>(3, false));
 
 		return 0;
 	}
@@ -464,6 +512,16 @@ public:
 	{
 		MOAILuaObject::RegisterLuaClass(state);
 
+		state.SetField(-1, "FLAG_BOTTOM",	Gwen::Pos::Bottom);
+		state.SetField(-1, "FLAG_CENTER",	Gwen::Pos::Center);
+		state.SetField(-1, "FLAG_CENTER_H", Gwen::Pos::CenterH);
+		state.SetField(-1, "FLAG_CENTER_V", Gwen::Pos::CenterV);
+		state.SetField(-1, "FLAG_FILL",		Gwen::Pos::Fill);
+		state.SetField(-1, "FLAG_LEFT",		Gwen::Pos::Left);
+		state.SetField(-1, "FLAG_NONE",		Gwen::Pos::None);
+		state.SetField(-1, "FLAG_RIGHT",	Gwen::Pos::Right);
+		state.SetField(-1, "FLAG_TOP",		Gwen::Pos::Top);
+
 		luaL_Reg regTable[] =
 		{
 			{ NULL, NULL }
@@ -480,6 +538,7 @@ public:
 		{
 			{ "blur",					_blur },
 			{ "closeMenus",				_closeMenus },
+			{ "dock",					_dock },
 			{ "focus",					_focus },
 			{ "getBounds",				_getBounds },
 			{ "getExtent",				_getExtent },
@@ -509,9 +568,11 @@ public:
 			{ "moveTo",					_moveTo },
 			{ "setBounds",				_setBounds },
 			{ "setDisabled",			_setDisabled },			
-			{ "setHeigh",				_setHeight },
+			{ "setHeight",				_setHeight },
 			{ "setHidden",				_setHidden },
 			{ "setKeyboardInputEnabled",_setKeyboardInputEnabled },
+			{ "setMargin",				_setMargin },
+			{ "setPadding",				_setPadding },
 			{ "setMouseInputEnabled",	_setMouseInputEnabled },
 			{ "setParent",				_setParent },
 			{ "setPosition",			_setPosition },
@@ -519,6 +580,7 @@ public:
 			{ "setTabable",				_setTabable },
 			{ "setToolTip",				_setToolTip },
 			{ "setWidth",				_setWidth },
+			{ "sizeToChildren",			_sizeToChildren },		
 			{ "show",					_show },
 			{ "createControl",			_createControl },
 			{ NULL, NULL }

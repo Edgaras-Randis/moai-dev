@@ -21,8 +21,19 @@
 #include <moai-gwen/MOAIGwenCollapsibleList.h>
 #include <moai-gwen/MOAIGwenCategoryButton.h>
 #include <moai-gwen/MOAIGwenCollapsibleCategory.h>
+#include <moai-gwen/MOAIGwenTabButton.h>
+#include <moai-gwen/MOAIGwenTabControl.h>
+#include <moai-gwen/MOAIGwenDockedTabControl.h>
+#include <moai-gwen/MOAIGwenListBox.h>
+#include <moai-gwen/MOAIGwenLayoutCenter.h>
+#include <moai-gwen/MOAIGwenCore.h>
+#include <moai-gwen/MOAIGwenCrossSplitter.h>
+#include <moai-gwen/MOAIGwenProgressBar.h>
+#include <moai-gwen/MOAIGwenGroupBox.h>
+#include <moai-gwen/MOAIGwenImagePanel.h>
+#include <moai-gwen/MOAIGwenStatusBar.h>
+#include <moai-gwen/MOAIGwenComboBox.h>
+#include <moai-gwen/MOAIGwenMenuItem.h>
 
-
-#include <moai-gwen/MOAIGwenRegister.h>
 
 #endif

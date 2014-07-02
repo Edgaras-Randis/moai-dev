@@ -1,23 +1,24 @@
 // Copyright (c) 2010-2011 Zipline Games, Inc. All Rights Reserved.
 // http://getmoai.com
 
-#ifndef MOAIGWENLABEL_H
-#define MOAIGWENLABEL_H
+#ifndef MOAIGwenTabButton_H
+#define MOAIGwenTabButton_H
 
 #include <moai-gwen/MOAIGwenRegister.h>
 #include <moai-gwen/MOAIGwenBase.h>
+#include <moai-gwen/MOAIGwenEvent.h>
 
-class MOAIGwenLabel : public MOAIGwenControl<Gwen::Controls::Label>
+class MOAIGwenTabButton : public MOAIGwenControl<Gwen::Controls::TabButton>, public MOAIGwenEventButton
 {
 private:
 	
 	//----------------------------------------------------------------//
 
 public:
-	DECL_GWEN_LUA_FACTORY(MOAIGwenLabel)
-	
+	DECL_GWEN_LUA_FACTORY(MOAIGwenTabButton)
+
 	//----------------------------------------------------------------//
-	MOAIGwenLabel()
+	MOAIGwenTabButton()
 	{
 		RTTI_BEGIN
 			RTTI_EXTEND(MOAIGwenBase)
@@ -25,18 +26,28 @@ public:
 
 		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Base));
 		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Label));
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Button));
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::TabButton));
 	}
 
 	void RegisterLuaClass(MOAILuaState& state)
 	{
 		MOAIGwenControl::RegisterLuaClass(state);
-		MOAIGwenRegisterLabel::RegisterLuaClass(state);
+		MOAIGwenRegisterButton::RegisterLuaClass(state);
+		MOAIGwenEventButton::RegisterLuaClass(state);
 	}
 
 	void RegisterLuaFuncs(MOAILuaState& state)
 	{
 		MOAIGwenControl::RegisterLuaFuncs(state);
-		MOAIGwenRegisterLabel::RegisterLuaFuncs(state);
+		MOAIGwenRegisterButton::RegisterLuaFuncs(state);
+		MOAIGwenEventButton::RegisterLuaFuncs(state);
+	}
+
+	void RegisterEvent()
+	{
+		MOAIGwenEventButton::SetBase(this);
+		MOAIGwenEventButton::RegisterEvents();
 	}
 };
 

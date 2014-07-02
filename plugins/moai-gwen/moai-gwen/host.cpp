@@ -25,6 +25,8 @@ void MOAIGwenContextInitialize() {
 		sIsInitialized = true;
 	}
 
+	REGISTER_LUA_CLASS ( MOAIGwenBase )
+	REGISTER_LUA_CLASS ( MOAIGwenCore )
 	REGISTER_LUA_CLASS ( MOAIGwenCanvas )
 	REGISTER_LUA_CLASS ( MOAIGwenRender )
 	REGISTER_LUA_CLASS ( MOAIGwenSkinTexture )
@@ -36,4 +38,16 @@ void MOAIGwenContextInitialize() {
 	REGISTER_LUA_CLASS ( MOAIGwenCollapsibleList )
 	REGISTER_LUA_CLASS ( MOAIGwenCollapsibleCategory )
 	REGISTER_LUA_CLASS ( MOAIGwenCategoryButton )
+	REGISTER_LUA_CLASS ( MOAIGwenTabButton )
+	REGISTER_LUA_CLASS ( MOAIGwenTabControl )
+	REGISTER_LUA_CLASS ( MOAIGwenDockedTabControl )
+	REGISTER_LUA_CLASS ( MOAIGwenListBox )
+	REGISTER_LUA_CLASS ( MOAIGwenLayoutCenter )
+	REGISTER_LUA_CLASS ( MOAIGwenCrossSplitter )
+	REGISTER_LUA_CLASS ( MOAIGwenProgressBar )
+	REGISTER_LUA_CLASS ( MOAIGwenGroupBox )
+	REGISTER_LUA_CLASS ( MOAIGwenImagePanel )
+	REGISTER_LUA_CLASS ( MOAIGwenStatusBar )
+	REGISTER_LUA_CLASS ( MOAIGwenComboBox )
+	REGISTER_LUA_CLASS ( MOAIGwenMenuItem )
 }

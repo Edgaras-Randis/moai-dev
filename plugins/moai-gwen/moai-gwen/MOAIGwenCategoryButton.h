@@ -4,6 +4,7 @@
 #ifndef MOAIGwenCategoryButton_H
 #define MOAIGwenCategoryButton_H
 
+#include <moai-gwen/MOAIGwenRegister.h>
 #include <moai-gwen/MOAIGwenBase.h>
 #include <moai-gwen/MOAIGwenEvent.h>
 
@@ -17,13 +18,37 @@ public:
 	DECL_GWEN_LUA_FACTORY(MOAIGwenCategoryButton)
 
 	//----------------------------------------------------------------//
-					MOAIGwenCategoryButton();
-				   ~MOAIGwenCategoryButton();
+	MOAIGwenCategoryButton()
+	{
+		RTTI_BEGIN
+			RTTI_EXTEND(MOAIGwenBase)
+		RTTI_END
 
-	void			RegisterLuaClass(MOAILuaState& state);
-	void			RegisterLuaFuncs(MOAILuaState& state);
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Base));
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Label));
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Button));
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::CategoryButton));
+	}
 
-	void			RegisterEvent();
+	void RegisterLuaClass(MOAILuaState& state)
+	{
+		MOAIGwenControl::RegisterLuaClass(state);
+		MOAIGwenRegisterButton::RegisterLuaClass(state);
+		MOAIGwenEventButton::RegisterLuaClass(state);
+	}
+
+	void RegisterLuaFuncs(MOAILuaState& state)
+	{
+		MOAIGwenControl::RegisterLuaFuncs(state);
+		MOAIGwenRegisterButton::RegisterLuaFuncs(state);
+		MOAIGwenEventButton::RegisterLuaFuncs(state);
+	}
+
+	void RegisterEvent()
+	{
+		MOAIGwenEventButton::SetBase(this);
+		MOAIGwenEventButton::RegisterEvents();
+	}
 };
 
 #endif

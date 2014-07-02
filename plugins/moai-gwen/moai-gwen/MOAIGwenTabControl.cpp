@@ -3,39 +3,37 @@
 
 #include "pch.h"
 #include <moai-gwen/MOAIGwenRegister.h>
-#include <moai-gwen/MOAIGwenCollapsibleCategory.h>
-#include <moai-gwen/MOAIGwenCollapsibleList.h>
+#include <moai-gwen/MOAIGwenTabControl.h>
 
 //================================================================//
 // lua
 //================================================================//
 
 //----------------------------------------------------------------//
-MOAIGwenCollapsibleList::MOAIGwenCollapsibleList()
+MOAIGwenTabControl::MOAIGwenTabControl()
 {
 	RTTI_BEGIN
 		RTTI_EXTEND(MOAIGwenBase)
 	RTTI_END
 
 	RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Base));
-	RTTI_CAST.insert(STRINGIFY(Gwen::Controls::ScrollControl));
-	RTTI_CAST.insert(STRINGIFY(Gwen::Controls::CollapsibleList));
+	RTTI_CAST.insert(STRINGIFY(Gwen::Controls::TabControl));
 }
 
 //----------------------------------------------------------------//
-MOAIGwenCollapsibleList::~MOAIGwenCollapsibleList() 
+MOAIGwenTabControl::~MOAIGwenTabControl() 
 {
 
 }
 
-void MOAIGwenCollapsibleList::RegisterLuaClass(MOAILuaState& state)
+void MOAIGwenTabControl::RegisterLuaClass(MOAILuaState& state)
 {
 	MOAIGwenControl::RegisterLuaClass(state);
-	MOAIGwenRegisterCollapsibleList::RegisterLuaClass(state);
+	MOAIGwenRegisterTabControl::RegisterLuaClass(state);
 }
 
-void MOAIGwenCollapsibleList::RegisterLuaFuncs(MOAILuaState& state)
+void MOAIGwenTabControl::RegisterLuaFuncs(MOAILuaState& state)
 {
 	MOAIGwenControl::RegisterLuaFuncs(state);
-	MOAIGwenRegisterCollapsibleList::RegisterLuaFuncs(state);
+	MOAIGwenRegisterTabControl::RegisterLuaFuncs(state);
 }

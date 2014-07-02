@@ -1,23 +1,23 @@
 // Copyright (c) 2010-2011 Zipline Games, Inc. All Rights Reserved.
 // http://getmoai.com
 
-#ifndef MOAIGWENLABEL_H
-#define MOAIGWENLABEL_H
+#ifndef MOAIGwenMenuItem_H
+#define MOAIGwenMenuItem_H
 
 #include <moai-gwen/MOAIGwenRegister.h>
 #include <moai-gwen/MOAIGwenBase.h>
 
-class MOAIGwenLabel : public MOAIGwenControl<Gwen::Controls::Label>
+class MOAIGwenMenuItem : public MOAIGwenControl<Gwen::Controls::MenuItem>
 {
 private:
 	
 	//----------------------------------------------------------------//
 
 public:
-	DECL_GWEN_LUA_FACTORY(MOAIGwenLabel)
-	
+	DECL_GWEN_LUA_FACTORY(MOAIGwenMenuItem)
+
 	//----------------------------------------------------------------//
-	MOAIGwenLabel()
+	MOAIGwenMenuItem()
 	{
 		RTTI_BEGIN
 			RTTI_EXTEND(MOAIGwenBase)
@@ -25,18 +25,18 @@ public:
 
 		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Base));
 		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Label));
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Button));
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::MenuItem));
 	}
 
 	void RegisterLuaClass(MOAILuaState& state)
 	{
 		MOAIGwenControl::RegisterLuaClass(state);
-		MOAIGwenRegisterLabel::RegisterLuaClass(state);
 	}
 
 	void RegisterLuaFuncs(MOAILuaState& state)
 	{
 		MOAIGwenControl::RegisterLuaFuncs(state);
-		MOAIGwenRegisterLabel::RegisterLuaFuncs(state);
 	}
 };
 

@@ -4,6 +4,7 @@
 #ifndef MOAIGwenCollapsibleList_H
 #define MOAIGwenCollapsibleList_H
 
+#include <moai-gwen/MOAIGwenRegister.h>
 #include <moai-gwen/MOAIGwenBase.h>
 #include <moai-gwen/MOAIGwenEvent.h>
 
@@ -38,11 +39,28 @@ public:
 	DECL_GWEN_LUA_FACTORY(MOAIGwenCollapsibleList)
 
 	//----------------------------------------------------------------//
-					MOAIGwenCollapsibleList();
-				   ~MOAIGwenCollapsibleList();
+	MOAIGwenCollapsibleList()
+	{
+		RTTI_BEGIN
+			RTTI_EXTEND(MOAIGwenBase)
+		RTTI_END
 
-	void			RegisterLuaClass(MOAILuaState& state);
-	void			RegisterLuaFuncs(MOAILuaState& state);
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Base));
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::ScrollControl));
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::CollapsibleList));
+	}
+
+	void RegisterLuaClass(MOAILuaState& state)
+	{
+		MOAIGwenControl::RegisterLuaClass(state);
+		MOAIGwenRegisterCollapsibleList::RegisterLuaClass(state);
+	}
+
+	void RegisterLuaFuncs(MOAILuaState& state)
+	{
+		MOAIGwenControl::RegisterLuaFuncs(state);
+		MOAIGwenRegisterCollapsibleList::RegisterLuaFuncs(state);
+	}
 };
 
 #endif
