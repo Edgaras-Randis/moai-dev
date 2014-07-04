@@ -202,4 +202,151 @@ public:
 	static void	RegisterLuaFuncs(MOAILuaState& state);
 };
 
+class MOAIGwenRegisterComboBox
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _selectItem(lua_State* L);
+	static int _selectItemByName(lua_State* L);
+	static int _getSelectedItem(lua_State* L);
+	static int _openList(lua_State* L);
+	static int _closeList(lua_State* L);
+	static int _clearItems(lua_State* L);
+	static int _addItem(lua_State* L);
+	static int _isMenuOpen(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
+class MOAIGwenRegisterMenuItem
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _getMenu(lua_State* L);
+	static int _isMenuOpen(lua_State* L);
+	static int _closeMenu(lua_State* L);
+	static int _toggleMenu(lua_State* L);
+	static int _setOnStrip(lua_State* L);
+	static int _isOnStrip(lua_State* L);
+	static int _setCheckable(lua_State* L);
+	static int _setChecked(lua_State* L);
+	static int _getChecked(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
+class MOAIGwenRegisterTextBox
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _setEditable(lua_State* L);
+	static int _setSelectAllOnFocus(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
+class MOAIGwenRegisterTextBoxNumeric
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _getFloatFromText(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
+class MOAIGwenRegisterTextBoxMultiline
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _getCurrentLine(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
+class MOAIGwenRegisterTextBoxPassword
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _setPasswordChar(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
+class MOAIGwenRegisterCheckBox
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _setChecked(lua_State* L);
+	static int _toggle(lua_State* L);
+	static int _isChecked(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
+class MOAIGwenRegisterCheckBoxWithLabel
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _getCheckBox(lua_State* L);
+	static int _getLabel(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
+class MOAIGwenRegisterNumericUpDown
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _setMin(lua_State* L);
+	static int _setMax(lua_State* L);
+	static int _setValue(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
 #endif

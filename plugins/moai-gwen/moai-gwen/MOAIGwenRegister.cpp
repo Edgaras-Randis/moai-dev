@@ -46,7 +46,7 @@ int MOAIGwenRegisterLabel::_setFont(lua_State* L)
 {
 	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::Label, "U");
 
-	Control->SetFont(Gwen::TextObject(state.GetValue<cc8*>(2, "")).GetUnicode(), state.GetValue<int>(3, 11), state.GetValue<bool>(4, false));
+	Control->SetFont(Gwen::TextObject(state.GetValue<cc8*>(2, "")), state.GetValue<int>(3, 11), state.GetValue<bool>(4, false));
 
 	return 0;
 }
@@ -209,13 +209,11 @@ int MOAIGwenRegisterButton::_setIsToggle(lua_State* L)
 
 void MOAIGwenRegisterButton::RegisterLuaClass(MOAILuaState& state)
 {
-	MOAIGwenRegisterLabel::RegisterLuaClass(state);
+
 }
 
 void MOAIGwenRegisterButton::RegisterLuaFuncs(MOAILuaState& state)
 {
-	MOAIGwenRegisterLabel::RegisterLuaFuncs(state);
-
 	luaL_Reg regTable[] =
 	{
 		{ "setImage",	 _setImage },
@@ -371,7 +369,7 @@ void MOAIGwenRegisterCollapsibleList::RegisterLuaFuncs(MOAILuaState& state)
 {
 	luaL_Reg regTable[] =
 	{
-		{ "add", _add },
+		{ "add",		 _add },
 		{ "addCategory", _addCategory },
 		{ NULL, NULL }
 	};
@@ -827,3 +825,492 @@ void MOAIGwenRegisterStatusBar::RegisterLuaFuncs(MOAILuaState& state)
 
 	luaL_register(state, 0, regTable);
 }
+
+//================================================================//
+
+int MOAIGwenRegisterComboBox::_selectItem(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::ComboBox, "UU");
+
+	MOAIGwenMenuItem* object = state.GetLuaObject<MOAIGwenMenuItem>(2, true);
+
+	if (!(object && object->Control()))
+	{
+		return 0;
+	}
+
+	Control->SelectItem(object->Control(), state.GetValue<bool>(3, true));
+
+	return 0;
+}
+
+int MOAIGwenRegisterComboBox::_selectItemByName(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::ComboBox, "U");
+
+	Control->SelectItemByName(state.GetValue<cc8*>(2, ""), state.GetValue<bool>(3, true));
+
+	return 0;
+}
+
+int MOAIGwenRegisterComboBox::_getSelectedItem(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::ComboBox, "U");
+
+	return 1;
+}
+
+int MOAIGwenRegisterComboBox::_openList(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::ComboBox, "U");
+
+	Control->OpenList();
+
+	return 0;
+}
+
+int MOAIGwenRegisterComboBox::_closeList(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::ComboBox, "U");
+
+	Control->CloseList();
+
+	return 0;
+}
+
+int MOAIGwenRegisterComboBox::_clearItems(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::ComboBox, "U");
+
+	Control->ClearItems();
+
+	return 0;
+}
+
+int MOAIGwenRegisterComboBox::_addItem(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::ComboBox, "U");
+
+	Gwen::Controls::MenuItem* item = Control->AddItem(Gwen::TextObject(state.GetValue<cc8*>(2, "")), state.GetValue<cc8*>(3, ""));
+
+	if (!(item && item->UserData.Exists("Data")))
+	{
+		return 0;
+	}
+
+	state.Push(item->UserData.Get<MOAIGwenBase*>("Data"));
+
+	return 1;
+}
+
+int MOAIGwenRegisterComboBox::_isMenuOpen(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::ComboBox, "U");
+
+	state.Push(Control->IsMenuComponent());
+
+	return 0;
+}
+
+
+void MOAIGwenRegisterComboBox::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterComboBox::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "selectItem",		  _selectItem },
+		{ "selectItemByName", _selectItemByName },
+		{ "getSelectedItem",  _getSelectedItem },
+		{ "openList",		  _openList },
+		{ "closeList",		  _closeList },
+		{ "clearItems",		  _clearItems },
+		{ "addItem",		  _addItem },
+		{ "isMenuOpen",		  _isMenuOpen },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
+
+//================================================================//
+
+int MOAIGwenRegisterMenuItem::_getMenu(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::MenuItem, "U");
+
+	Gwen::Controls::Menu* Menu = Control->GetMenu();
+
+	if (!(Menu && Menu->UserData.Exists("Data")))
+	{
+		return 0;
+	}
+
+	state.Push(Menu->UserData.Get<MOAIGwenBase*>("Data"));
+
+	return 1;
+}
+
+int MOAIGwenRegisterMenuItem::_isMenuOpen(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::MenuItem, "U");
+
+	state.Push(Control->IsMenuOpen());
+
+	return 1;
+}
+
+int MOAIGwenRegisterMenuItem::_closeMenu(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::MenuItem, "U");
+
+	Control->CloseMenu();
+
+	return 0;
+}
+
+int MOAIGwenRegisterMenuItem::_toggleMenu(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::MenuItem, "U");
+
+	Control->ToggleMenu();
+
+	return 0;
+}
+
+int MOAIGwenRegisterMenuItem::_setOnStrip(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::MenuItem, "U");
+
+	Control->SetOnStrip(state.GetValue<bool>(2, false));
+
+	return 0;
+}
+
+int MOAIGwenRegisterMenuItem::_isOnStrip(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::MenuItem, "U");
+
+	state.Push(Control->OnStrip());
+
+	return 1;
+}
+
+int MOAIGwenRegisterMenuItem::_setCheckable(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::MenuItem, "U");
+
+	Control->SetCheckable(state.GetValue<bool>(2, false));
+
+	return 0;
+}
+
+int MOAIGwenRegisterMenuItem::_setChecked(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::MenuItem, "U");
+
+	Control->SetChecked(state.GetValue<bool>(2, false));
+
+	return 0;
+}
+
+int MOAIGwenRegisterMenuItem::_getChecked(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::MenuItem, "U");
+
+	state.Push(Control->GetChecked());
+
+	return 1;
+}
+
+void MOAIGwenRegisterMenuItem::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterMenuItem::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "getMenu",	  _getMenu },
+		{ "isMenuOpen",	  _isMenuOpen },
+		{ "closeMenu",    _closeMenu },
+		{ "toggleMenu",   _toggleMenu },
+		{ "setOnStrip",   _setOnStrip },
+		{ "onStrip",	  _isOnStrip },
+		{ "setCheckable", _setCheckable },
+		{ "setChecked",   _setChecked },
+		{ "getChecked",   _getChecked },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
+
+//================================================================//
+
+int MOAIGwenRegisterTextBox::_setEditable(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::TextBox, "U");
+
+	Control->SetEditable(state.GetValue<bool>(2, true));
+
+	return 0;
+}
+
+int MOAIGwenRegisterTextBox::_setSelectAllOnFocus(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::TextBox, "U");
+
+	Control->SetSelectAllOnFocus(state.GetValue<bool>(2, false));
+
+	return 0;
+}
+
+void MOAIGwenRegisterTextBox::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterTextBox::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "setEditable",		 _setEditable },
+		{ "setSelectAllOnFocus", _setSelectAllOnFocus },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
+
+//================================================================//
+
+int MOAIGwenRegisterTextBoxNumeric::_getFloatFromText(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::TextBoxNumeric, "U");
+
+	state.Push(Control->GetFloatFromText());
+
+	return 1;
+}
+
+void MOAIGwenRegisterTextBoxNumeric::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterTextBoxNumeric::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "getFloatFromText", _getFloatFromText },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
+
+//================================================================//
+
+int MOAIGwenRegisterTextBoxMultiline::_getCurrentLine(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::TextBoxMultiline, "U");
+
+	state.Push(Control->GetCurrentLine());
+
+	return 1;
+}
+
+void MOAIGwenRegisterTextBoxMultiline::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterTextBoxMultiline::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "getCurrentLine", _getCurrentLine },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
+
+//================================================================//
+
+int MOAIGwenRegisterTextBoxPassword::_setPasswordChar(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::PasswordTextBox, "U");
+
+	Control->SetPasswordChar(state.GetValue<s8>(2, '*'));
+
+	return 0;
+}
+
+void MOAIGwenRegisterTextBoxPassword::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterTextBoxPassword::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "setPasswordChar", _setPasswordChar },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
+
+//================================================================//
+
+int MOAIGwenRegisterCheckBox::_setChecked(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::CheckBox, "U");
+
+	Control->SetChecked(state.GetValue<bool>(2, false));
+
+	return 0;
+}
+
+int MOAIGwenRegisterCheckBox::_toggle(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::CheckBox, "U");
+
+	Control->Toggle();
+
+	return 0;
+}
+
+int MOAIGwenRegisterCheckBox::_isChecked(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::CheckBox, "U");
+
+	state.Push(Control->IsChecked());
+
+	return 1;
+}
+
+void MOAIGwenRegisterCheckBox::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterCheckBox::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "setChecked", _setChecked },
+		{ "toggle",	    _toggle },
+		{ "isChecked",  _isChecked },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
+
+//================================================================//
+
+int MOAIGwenRegisterCheckBoxWithLabel::_getLabel(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::CheckBoxWithLabel, "U");
+
+	Gwen::Controls::LabelClickable* value = Control->Label();
+
+	if (!(value && value->UserData.Exists("Data")))
+	{
+		return 0;
+	}
+
+	state.Push(value->UserData.Get<MOAIGwenBase*>("Data"));
+
+	return 1;
+}
+
+int MOAIGwenRegisterCheckBoxWithLabel::_getCheckBox(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::CheckBoxWithLabel, "U");
+
+	Gwen::Controls::CheckBox* value = Control->Checkbox();
+
+	if (!(value && value->UserData.Exists("Data")))
+	{
+		return 0;
+	}
+
+	state.Push(value->UserData.Get<MOAIGwenBase*>("Data"));
+
+	return 1;
+}
+
+
+void MOAIGwenRegisterCheckBoxWithLabel::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterCheckBoxWithLabel::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "getLabel",	 _getLabel },
+		{ "getCheckBox", _getCheckBox },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
+
+//================================================================//
+
+int MOAIGwenRegisterNumericUpDown::_setMin(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::NumericUpDown, "U");
+
+	Control->SetMin(state.GetValue<int>(2, 0));
+
+	return 0;
+}
+
+int MOAIGwenRegisterNumericUpDown::_setMax(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::NumericUpDown, "U");
+
+	Control->SetMax(state.GetValue<int>(2, 0));
+
+	return 0;
+}
+
+int MOAIGwenRegisterNumericUpDown::_setValue(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::NumericUpDown, "U");
+
+	Control->SetValue(state.GetValue<int>(2, 0));
+
+	return 0;
+}
+
+void MOAIGwenRegisterNumericUpDown::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterNumericUpDown::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "setMin",   _setMin },
+		{ "setMax",   _setMax },
+		{ "setValue", _setValue },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
+

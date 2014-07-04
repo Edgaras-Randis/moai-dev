@@ -35,9 +35,18 @@ namespace Gwen
 		{
 			public:
 
-				GWEN_CONTROL_INLINE( LabeledRadioButton, Base )
+				GWEN_CONTROL_INLINE(LabeledRadioButton, Base)
 				{
+					m_RadioButton = NULL;
+					m_Label = NULL;
+
 					SetSize( 200, 19 );
+
+					if (Data)
+					{
+						return;
+					}
+
 					m_RadioButton = new RadioButton( this );
 					m_RadioButton->Dock( Pos::Left );
 					m_RadioButton->SetMargin( Margin( 0, 2, 2, 2 ) );

@@ -634,6 +634,8 @@ public:
 		ParentBase->LuaRetain(Cannary);
 	}
 
+	virtual void Override() {}
+
 	virtual void SetParent(Gwen::Controls::Base* pParent)
 	{
 		T::SetParent(pParent);
@@ -703,6 +705,7 @@ public:
 		}
 
 		Data = new ControlBase<T>(parent->Base(), name, (MOAIGwenBase*)this);
+		Data->Override();
 
 		RegisterEvent();
 	}

@@ -71,23 +71,18 @@ void NumericUpDown::SetMax( int i )
 
 void NumericUpDown::SetValue( int i )
 {
-	if ( i > m_iMax ) { i = m_iMax; }
-
-	if ( i < m_iMin ) { i = m_iMin; }
-
-	if ( m_iNumber == i )
-	{
-		return;
-	}
-
-	m_iNumber = i;
+	m_iNumber = Clamp<int>(i, m_iMin, m_iMax);
 	// Don't update the text if we're typing in it..
 	// Undone - any reason why not?
 	//if ( !HasFocus() )
 	{
 		SyncTextFromNumber();
 	}
-	OnChange();
+
+	if (m_iNumber != i)
+	{
+		OnChange();
+	}
 }
 
 void NumericUpDown::OnChange()

@@ -8,6 +8,7 @@
 #include <Gwen/Gwen.h>
 #include <Gwen/Controls/Base.h>
 #include <Gwen/Controls.h>
+#include <Gwen/Controls/NumericUpDown.h>
 #include <Gwen/Controls/CollapsibleList.h>
 #include <Gwen/Controls/DockedTabControl.h>
 #include <Gwen/Controls/CrossSplitter.h>

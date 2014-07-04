@@ -52,7 +52,16 @@ namespace Gwen
 
 				GWEN_CONTROL_INLINE( CheckBoxWithLabel, Base )
 				{
+					m_Checkbox = NULL;
+					m_Label    = NULL;
+
 					SetSize( 200, 19 );
+
+					if (Data)
+					{
+						return;
+					}
+
 					m_Checkbox = new CheckBox( this );
 					m_Checkbox->Dock( Pos::Left );
 					m_Checkbox->SetMargin( Margin( 0, 2, 2, 2 ) );
@@ -68,7 +77,7 @@ namespace Gwen
 				virtual LabelClickable* Label() { return m_Label; }
 				virtual bool OnKeySpace( bool bDown ) { if ( !bDown ) { m_Checkbox->SetChecked( !m_Checkbox->IsChecked() ); } return true; }
 
-			private:
+			protected:
 
 				CheckBox*		m_Checkbox;
 				LabelClickable*	m_Label;

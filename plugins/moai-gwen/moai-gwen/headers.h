@@ -16,6 +16,7 @@
 #include <moai-gwen/MOAIGwenEvent.h>
 
 #include <moai-gwen/MOAIGwenLabel.h>
+#include <moai-gwen/MOAIGwenLabelClickable.h>
 #include <moai-gwen/MOAIGwenButton.h>
 #include <moai-gwen/MOAIGwenDockBase.h>
 #include <moai-gwen/MOAIGwenCollapsibleList.h>
@@ -34,6 +35,12 @@
 #include <moai-gwen/MOAIGwenStatusBar.h>
 #include <moai-gwen/MOAIGwenComboBox.h>
 #include <moai-gwen/MOAIGwenMenuItem.h>
-
+#include <moai-gwen/MOAIGwenTextBox.h>
+#include <moai-gwen/MOAIGwenTextBoxNumeric.h>
+#include <moai-gwen/MOAIGwenTextBoxMultiline.h>
+#include <moai-gwen/MOAIGwenTextBoxPassword.h>
+#include <moai-gwen/MOAIGwenCheckBox.h>
+#include <moai-gwen/MOAIGwenCheckBoxWithLabel.h>
+#include <moai-gwen/MOAIGwenNumericUpDown.h>
 
 #endif

@@ -1,23 +1,23 @@
 // Copyright (c) 2010-2011 Zipline Games, Inc. All Rights Reserved.
 // http://getmoai.com
 
-#ifndef MOAIGWENBUTTON_H
-#define MOAIGWENBUTTON_H
+#ifndef MOAIGwenCheckBox_H
+#define MOAIGwenCheckBox_H
 
+#include <moai-gwen/MOAIGwenRegister.h>
 #include <moai-gwen/MOAIGwenBase.h>
-#include <moai-gwen/MOAIGwenEvent.h>
 
-class MOAIGwenButton : public MOAIGwenControl<Gwen::Controls::Button>, public MOAIGwenEventButton
+class MOAIGwenCheckBox : public MOAIGwenControl<Gwen::Controls::CheckBox>
 {
 private:
 	
 	//----------------------------------------------------------------//
 
 public:
-	DECL_GWEN_LUA_FACTORY(MOAIGwenButton)
+	DECL_GWEN_LUA_FACTORY(MOAIGwenCheckBox)
 
 	//----------------------------------------------------------------//
-	MOAIGwenButton()
+	MOAIGwenCheckBox()
 	{
 		RTTI_BEGIN
 			RTTI_EXTEND(MOAIGwenBase)
@@ -26,6 +26,7 @@ public:
 		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Base));
 		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Label));
 		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::Button));
+		RTTI_CAST.insert(STRINGIFY(Gwen::Controls::CheckBox));
 	}
 
 	void RegisterLuaClass(MOAILuaState& state)
@@ -33,7 +34,7 @@ public:
 		MOAIGwenControl::RegisterLuaClass(state);
 		MOAIGwenRegisterLabel::RegisterLuaClass(state);
 		MOAIGwenRegisterButton::RegisterLuaClass(state);
-		MOAIGwenEventButton::RegisterLuaClass(state);
+		MOAIGwenRegisterCheckBox::RegisterLuaClass(state);
 	}
 
 	void RegisterLuaFuncs(MOAILuaState& state)
@@ -41,13 +42,7 @@ public:
 		MOAIGwenControl::RegisterLuaFuncs(state);
 		MOAIGwenRegisterLabel::RegisterLuaFuncs(state);
 		MOAIGwenRegisterButton::RegisterLuaFuncs(state);
-		MOAIGwenEventButton::RegisterLuaFuncs(state);
-	}
-
-	void RegisterEvent()
-	{
-		MOAIGwenEventButton::SetBase(this);
-		MOAIGwenEventButton::RegisterEvents();
+		MOAIGwenRegisterCheckBox::RegisterLuaFuncs(state);
 	}
 };
 

@@ -33,6 +33,7 @@ public:
 	void RegisterLuaClass(MOAILuaState& state)
 	{
 		MOAIGwenControl::RegisterLuaClass(state);
+		MOAIGwenRegisterLabel::RegisterLuaClass(state);
 		MOAIGwenRegisterButton::RegisterLuaClass(state);
 		MOAIGwenEventButton::RegisterLuaClass(state);
 	}
@@ -40,6 +41,7 @@ public:
 	void RegisterLuaFuncs(MOAILuaState& state)
 	{
 		MOAIGwenControl::RegisterLuaFuncs(state);
+		MOAIGwenRegisterLabel::RegisterLuaFuncs(state);
 		MOAIGwenRegisterButton::RegisterLuaFuncs(state);
 		MOAIGwenEventButton::RegisterLuaFuncs(state);
 	}
