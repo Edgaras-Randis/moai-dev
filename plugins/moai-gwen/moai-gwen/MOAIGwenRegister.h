@@ -349,4 +349,37 @@ public:
 	static void	RegisterLuaFuncs(MOAILuaState& state);
 };
 
+class MOAIGwenRegisterRadioButtonWithLabel
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _getRadioButton(lua_State* L);
+	static int _getLabel(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
+class MOAIGwenRegisterRadioButtonController
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _addOption(lua_State* L);
+	static int _getSelected(lua_State* L);
+	static int _getSelectedName(lua_State* L);
+	static int _getSelectedLabel(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
+
+
 #endif

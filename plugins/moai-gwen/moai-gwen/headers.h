@@ -42,5 +42,8 @@
 #include <moai-gwen/MOAIGwenCheckBox.h>
 #include <moai-gwen/MOAIGwenCheckBoxWithLabel.h>
 #include <moai-gwen/MOAIGwenNumericUpDown.h>
+#include <moai-gwen/MOAIGwenRadioButton.h>
+#include <moai-gwen/MOAIGwenRadioButtonWithLabel.h>
+#include <moai-gwen/MOAIGwenRadioButtonController.h>
 
 #endif

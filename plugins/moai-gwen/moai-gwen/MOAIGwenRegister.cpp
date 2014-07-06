@@ -1314,3 +1314,124 @@ void MOAIGwenRegisterNumericUpDown::RegisterLuaFuncs(MOAILuaState& state)
 	luaL_register(state, 0, regTable);
 }
 
+//================================================================//
+
+int MOAIGwenRegisterRadioButtonWithLabel::_getLabel(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::LabeledRadioButton, "U");
+
+	Gwen::Controls::LabelClickable* value = Control->GetLabel();
+
+	if (!(value && value->UserData.Exists("Data")))
+	{
+		return 0;
+	}
+
+	state.Push(value->UserData.Get<MOAIGwenBase*>("Data"));
+
+	return 1;
+}
+
+int MOAIGwenRegisterRadioButtonWithLabel::_getRadioButton(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::LabeledRadioButton, "U");
+
+	Gwen::Controls::RadioButton* value = Control->GetRadioButton();
+
+	if (!(value && value->UserData.Exists("Data")))
+	{
+		return 0;
+	}
+
+	state.Push(value->UserData.Get<MOAIGwenBase*>("Data"));
+
+	return 1;
+}
+
+void MOAIGwenRegisterRadioButtonWithLabel::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterRadioButtonWithLabel::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "getLabel",	 _getLabel },
+		{ "getCheckBox", _getRadioButton },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
+
+//================================================================//
+
+int MOAIGwenRegisterRadioButtonController::_addOption(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::RadioButtonController, "U");
+
+	Gwen::Controls::LabeledRadioButton* value = Control->AddOption(state.GetValue<cc8*>(2, ""), state.GetValue<cc8*>(3, ""));
+
+	if (!(value && value->UserData.Exists("Data")))
+	{
+		return 0;
+	}
+
+	state.Push(value->UserData.Get<MOAIGwenBase*>("Data"));
+
+	return 1;
+}
+
+int MOAIGwenRegisterRadioButtonController::_getSelected(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::RadioButtonController, "U");
+
+	Gwen::Controls::LabeledRadioButton* value = Control->GetSelected();
+
+	if (!(value && value->UserData.Exists("Data")))
+	{
+		return 0;
+	}
+
+	state.Push(value->UserData.Get<MOAIGwenBase*>("Data"));
+
+	return 1;
+}
+
+int MOAIGwenRegisterRadioButtonController::_getSelectedName(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::RadioButtonController, "U");
+
+	state.Push(Control->GetSelectedName().c_str());
+
+	return 1;
+}
+
+int MOAIGwenRegisterRadioButtonController::_getSelectedLabel(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::RadioButtonController, "U");
+
+	state.Push(Control->GetSelectedLabel().c_str());
+
+	return 1;
+}
+
+void MOAIGwenRegisterRadioButtonController::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterRadioButtonController::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "addOption",		  _addOption },
+		{ "getSelected",	  _getSelected },
+		{ "getSelectedName",  _getSelectedName },
+		{ "getSelectedLabel", _getSelectedLabel },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}

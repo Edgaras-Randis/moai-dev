@@ -58,4 +58,7 @@ void MOAIGwenContextInitialize() {
 	REGISTER_LUA_CLASS ( MOAIGwenCheckBox )
 	REGISTER_LUA_CLASS ( MOAIGwenCheckBoxWithLabel )
 	REGISTER_LUA_CLASS ( MOAIGwenNumericUpDown )
+	REGISTER_LUA_CLASS ( MOAIGwenRadioButton )
+	REGISTER_LUA_CLASS ( MOAIGwenRadioButtonWithLabel )
+	REGISTER_LUA_CLASS ( MOAIGwenRadioButtonController )
 }

@@ -12,6 +12,8 @@
 #include <Gwen/Controls/CollapsibleList.h>
 #include <Gwen/Controls/DockedTabControl.h>
 #include <Gwen/Controls/CrossSplitter.h>
+#include <Gwen/Controls/RadioButton.h>
+#include <Gwen/Controls/RadioButtonController.h>
 #include <Gwen/Texture.h>
 #include <Gwen/Skins/Texturing.h>
 #include <Gwen/UnitTest/UnitTest.h>

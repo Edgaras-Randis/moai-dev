@@ -39,7 +39,7 @@ namespace Gwen
 
 				Event::Caller		onSelectionChange;
 
-			private:
+			protected:
 
 				LabeledRadioButton* m_Selected;
 		};

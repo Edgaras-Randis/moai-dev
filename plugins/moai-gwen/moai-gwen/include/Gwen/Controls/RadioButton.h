@@ -76,7 +76,7 @@ namespace Gwen
 
 				virtual void Select() { m_RadioButton->SetChecked( true ); }
 
-			private:
+			protected:
 
 				RadioButton*		m_RadioButton;
 				LabelClickable*		m_Label;
