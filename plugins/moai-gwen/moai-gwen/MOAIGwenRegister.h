@@ -381,5 +381,25 @@ public:
 	static void	RegisterLuaFuncs(MOAILuaState& state);
 };
 
+class MOAIGwenRegisterSlider
+{
+private:
+
+	//----------------------------------------------------------------//
+
+	static int _setClampToNotch(lua_State* L);
+	static int _setNotchCount(lua_State* L);
+	static int _getNotchCount(lua_State* L);
+	static int _setRange(lua_State* L);
+	static int _getFloatValue(lua_State* L);
+	static int _setFloatValue(lua_State* L);
+	static int _getMin(lua_State* L);
+	static int _getMax(lua_State* L);
+
+public:
+
+	static void	RegisterLuaClass(MOAILuaState& state);
+	static void	RegisterLuaFuncs(MOAILuaState& state);
+};
 
 #endif

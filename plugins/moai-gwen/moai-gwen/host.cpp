@@ -61,4 +61,6 @@ void MOAIGwenContextInitialize() {
 	REGISTER_LUA_CLASS ( MOAIGwenRadioButton )
 	REGISTER_LUA_CLASS ( MOAIGwenRadioButtonWithLabel )
 	REGISTER_LUA_CLASS ( MOAIGwenRadioButtonController )
+	REGISTER_LUA_CLASS ( MOAIGwenSliderHorizontal )
+	REGISTER_LUA_CLASS ( MOAIGwenSliderVertical )
 }

@@ -45,5 +45,7 @@
 #include <moai-gwen/MOAIGwenRadioButton.h>
 #include <moai-gwen/MOAIGwenRadioButtonWithLabel.h>
 #include <moai-gwen/MOAIGwenRadioButtonController.h>
+#include <moai-gwen/MOAIGwenSliderHorizontal.h>
+#include <moai-gwen/MOAIGwenSliderVertical.h>
 
 #endif

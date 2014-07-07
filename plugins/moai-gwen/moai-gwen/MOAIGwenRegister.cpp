@@ -1435,3 +1435,100 @@ void MOAIGwenRegisterRadioButtonController::RegisterLuaFuncs(MOAILuaState& state
 
 	luaL_register(state, 0, regTable);
 }
+
+//================================================================//
+
+int MOAIGwenRegisterSlider::_setClampToNotch(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::Slider, "U");
+
+	Control->SetClampToNotches(state.GetValue<bool>(2, false));
+
+	return 0;
+}
+
+int MOAIGwenRegisterSlider::_setNotchCount(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::Slider, "UN");
+
+	Control->SetNotchCount(state.GetValue<int>(2, 3));
+
+	return 0;
+}
+
+int MOAIGwenRegisterSlider::_getNotchCount(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::Slider, "U");
+
+	state.Push(Control->GetNotchCount());
+
+	return 1;
+}
+
+int MOAIGwenRegisterSlider::_setRange(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::Slider, "UNN");
+
+	Control->SetRange(state.GetValue<float>(2, 0), state.GetValue<float>(3, 1));
+
+	return 0;
+}
+
+int MOAIGwenRegisterSlider::_getFloatValue(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::Slider, "U");
+
+	state.Push(Control->GetFloatValue());
+
+	return 1;
+}
+
+int MOAIGwenRegisterSlider::_setFloatValue(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::Slider, "U");
+
+	Control->SetFloatValue(state.GetValue<float>(2, 0));
+
+	return 0;
+}
+
+int MOAIGwenRegisterSlider::_getMin(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::Slider, "U");
+
+	state.Push(Control->GetMin());
+
+	return 1;
+}
+
+int MOAIGwenRegisterSlider::_getMax(lua_State* L)
+{
+	MOAI_GWEN_REGISTER_SETUP(Gwen::Controls::Slider, "U");
+
+	state.Push(Control->GetMax());
+
+	return 1;
+}
+
+void MOAIGwenRegisterSlider::RegisterLuaClass(MOAILuaState& state)
+{
+
+}
+
+void MOAIGwenRegisterSlider::RegisterLuaFuncs(MOAILuaState& state)
+{
+	luaL_Reg regTable[] =
+	{
+		{ "setClampToNotch", _setClampToNotch },
+		{ "setNotchCount",	 _setNotchCount },
+		{ "getNotchCount",	 _getNotchCount },
+		{ "setRange",	     _setRange },
+		{ "getFloatValue",	 _getFloatValue },
+		{ "setFloatValue",   _setFloatValue },
+		{ "getMin",			 _getMin },
+		{ "getMax",			 _getMax },
+		{ NULL, NULL }
+	};
+
+	luaL_register(state, 0, regTable);
+}
